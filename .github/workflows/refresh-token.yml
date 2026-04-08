@@ -1,0 +1,25 @@
+name: Refresh Threads Token
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # 毎月1日 JST 9時
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refresh long-lived token
+        id: refresh
+        run: |
+          RESPONSE=$(curl -s -X GET "https://graph.threads.net/refresh_access_token?grant_type=th_refresh_token&access_token=${{ secrets.THREADS_ACCESS_TOKEN }}")
+          echo $RESPONSE
+          NEW_TOKEN=$(echo $RESPONSE | python3 -c "import sys,json; print(json.load(sys.stdin)['access_token'])")
+          echo "new_token=$NEW_TOKEN" >> $GITHUB_OUTPUT
+
+      - name: Update secret
+        uses: gliech/create-github-secret-action@v1
+        with:
+          name: THREADS_ACCESS_TOKEN
+          value: ${{ steps.refresh.outputs.new_token }}
+          pa_token: ${{ secrets.PA_TOKEN }}
