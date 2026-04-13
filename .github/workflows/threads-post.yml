@@ -2,7 +2,7 @@ name: Threads Auto Post
 
 on:
   schedule:
-    - cron: '0 0,2,4,6,8,10,12,14 * * *'  # JST 9,11,13,15,17,19,21,23時
+    - cron: '0 0,4,8,12 * * *'  # JST 9,11,13,15,17,19,21,23時
   workflow_dispatch:
 
 jobs:
