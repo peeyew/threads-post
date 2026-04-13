@@ -13,6 +13,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.82.0",
     "dotenv": "^17.4.1",
+    "googleapis": "^144.0.0",
     "node-fetch": "^3.3.2",
     "rss-parser": "^3.13.0"
   }

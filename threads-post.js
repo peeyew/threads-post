@@ -21,9 +21,11 @@ const RSS_SOURCES = [
   'https://www3.nhk.or.jp/rss/news/cat5.xml',       // NHK政治
   'https://fx.minkabu.jp/news.rss',                  // みんかぶFX
   'https://www.fxstreet.com/rss/news',               // FXStreet
+  'https://feeds.bbci.co.uk/japanese/rss.xml',       // BBC日本語
+  'https://jp.reuters.com/rssFeed/worldNews',        // ロイター国際
 ];
 
-const KEYWORDS = ['為替', 'ドル', '円', '金利', '日銀', '米', '中国', '政治', '経済', '株', '関税', 'トランプ', '政府', '首相', '大統領', 'インフレ', '利上げ', '利下げ', '国際', '外交'];
+const KEYWORDS = ['為替', 'ドル', '円', '金利', '日銀', '米', '中国', '政治', '経済', '株', '関税', 'トランプ', '政府', '首相', '大統領', 'インフレ', '利上げ', '利下げ', '国際', '外交', '戦争', 'ウクライナ', 'ロシア', 'イスラエル', 'ガザ', '中東', '北朝鮮', 'NATO'];
 
 const parser = new Parser({ timeout: 5000 });
 const allItems = [];
@@ -51,7 +53,7 @@ const matched = allItems.filter(item =>
 );
 const candidates = matched.length > 0 ? matched : allItems;
 
-// ランダムに1件選ぶ（重複防止）
+// ランダムに1件選ぶ
 const selected = candidates[Math.floor(Math.random() * Math.min(candidates.length, 5))];
 if (!selected) {
   console.log('ニュースなし、スキップ');
@@ -60,14 +62,16 @@ if (!selected) {
 console.log(`選択記事: ${selected.title}`);
 
 // ── 3. Claude Haiku で投稿文生成 ──────────────────────────
-const prompt = `以下のニュースタイトルをもとに、Threadsへの投稿文を1つ書いてください。
+const prompt = `以下のニュースタイトルをもとに、Threadsへの速報スタイルの投稿文を1つ書いてください。
 
 ニュース:「${selected.title}」
 
 条件：
 - 150文字以内
-- 読者が「なるほど」と思える簡潔な要約や視点を加える
-- 堅すぎず、読みやすいトーン
+- 冒頭に【速報】または【Breaking】をつける
+- 事実を1行で伝えた後、改行して「→ 」で始まる一言コメントを加える
+- コメントは驚き・共感・警戒感のどれかを引き出す内容
+- 読者が「シェアしたい」と思えるトーン
 - ハッシュタグは付けない
 - URLは含めない
 - 投稿文のみ出力（説明不要）`;
@@ -91,7 +95,6 @@ const APP_ID = process.env.THREADS_USER_ID;
 const ACCESS_TOKEN = process.env.THREADS_ACCESS_TOKEN;
 
 try {
-  // Step 1: コンテナ作成
   const createRes = await fetch(
     `https://graph.threads.net/v1.0/${APP_ID}/threads`,
     {
@@ -109,10 +112,8 @@ try {
 
   if (!createData.id) throw new Error('コンテナID取得失敗');
 
-  // 少し待つ
   await new Promise(r => setTimeout(r, 3000));
 
-  // Step 2: 公開
   const publishRes = await fetch(
     `https://graph.threads.net/v1.0/${APP_ID}/threads_publish`,
     {
