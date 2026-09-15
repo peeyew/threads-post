@@ -1,0 +1,48 @@
+name: DMM TV Threads自動投稿(2)
+
+on:
+  # schedule:
+  #   - cron: '0 2 * * *'  # 11:00 JST = 02:00 UTC
+  #   ↑ threads_poster.gs(Google Apps Script)側の二重投稿経路が完全に
+  #     止まっていることを確認できるまで、意図的にコメントアウトしている。
+  #     確認が取れたらコメントを外して有効化すること。
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - name: DMM TV商品を1件取得
+        run: node fetch-dmm.js
+        env:
+          DMM_SLOT: dmmtv
+          DMM_API_ID: ${{ secrets.DMM_API_ID }}
+          DMM_AFFILIATE_ID_THREADS: ${{ secrets.DMM_AFFILIATE_ID_THREADS }}
+          DMM_HITS: '1'
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - name: Threads投稿
+        run: node post-threads.js
+        env:
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          GAS_ENDPOINT: ${{ secrets.GAS_ENDPOINT }}
+      - name: posts.json/posted-ids.jsonの変更をコミット
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add posts.json posted-ids.json
+          if git diff --cached --quiet; then
+            echo "変更なし"
+          else
+            git commit -m "chore: update posts.json/posted-ids.json [skip ci]"
+            git push
+          fi
