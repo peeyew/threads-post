@@ -7,6 +7,11 @@ on:
   #     止まっていることを確認できるまで、意図的にコメントアウトしている。
   #     確認が取れたらコメントを外して有効化すること。
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'DRY_RUN (1ならThreadsへの実際の投稿をスキップしログのみ出力)'
+        required: false
+        default: '1'
 
 permissions:
   contents: write
@@ -34,6 +39,7 @@ jobs:
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           GAS_ENDPOINT: ${{ secrets.GAS_ENDPOINT }}
+          DRY_RUN: ${{ inputs.dry_run }}
       - name: posts.json/posted-ids.jsonの変更をコミット
         # post-threads.jsが失敗しても、fetch-dmm.jsが積んだpendingエントリを
         # 失わないよう必ず実行する（次回実行時のリトライ対象として残すため）
