@@ -29,9 +29,11 @@ jobs:
         run: |
           echo "DMM_API_ID length: ${#DMM_API_ID}"
           echo "DMM_AFFILIATE_ID_THREADS length: ${#DMM_AFFILIATE_ID_THREADS}"
+          echo "DIAG_TEST_SECRET length (期待値27): ${#DIAG_TEST_SECRET}"
         env:
           DMM_API_ID: ${{ secrets.DMM_API_ID }}
           DMM_AFFILIATE_ID_THREADS: ${{ secrets.DMM_AFFILIATE_ID_THREADS }}
+          DIAG_TEST_SECRET: ${{ secrets.DIAG_TEST_SECRET }}
       - name: DMM TV商品を1件取得
         run: node fetch-dmm.js
         env:
