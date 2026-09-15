@@ -25,6 +25,13 @@ jobs:
         with:
           node-version: '20'
       - run: npm install
+      - name: "[診断用/一時] Secret文字数チェック(値は出力しない)"
+        run: |
+          echo "DMM_API_ID length: ${#DMM_API_ID}"
+          echo "DMM_AFFILIATE_ID_THREADS length: ${#DMM_AFFILIATE_ID_THREADS}"
+        env:
+          DMM_API_ID: ${{ secrets.DMM_API_ID }}
+          DMM_AFFILIATE_ID_THREADS: ${{ secrets.DMM_AFFILIATE_ID_THREADS }}
       - name: DMM TV商品を1件取得
         run: node fetch-dmm.js
         env:
