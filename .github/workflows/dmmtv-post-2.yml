@@ -41,6 +41,10 @@ jobs:
           GAS_ENDPOINT: ${{ secrets.GAS_ENDPOINT }}
           DRY_RUN: ${{ inputs.dry_run }}
       - name: posts.json/posted-ids.jsonの変更をコミット
+        # post-threads.jsが失敗しても、fetch-dmm.jsが積んだpendingエントリを
+        # 失わないよう必ず実行する（次回実行時のリトライ対象として残すため）。
+        # 複数のworkflowがほぼ同時に走ってpushが競合した場合に備え、
+        # 失敗時はgit pull --rebaseしてから再pushを最大3回まで試みる。
         if: always()
         run: |
           git config user.name "github-actions[bot]"
@@ -50,5 +54,18 @@ jobs:
             echo "変更なし"
           else
             git commit -m "chore: update posts.json/posted-ids.json [skip ci]"
-            git push
+            success=0
+            for i in 1 2 3; do
+              if git push; then
+                echo "push成功(試行${i}回目)"
+                success=1
+                break
+              fi
+              echo "push失敗(試行${i}回目)。git pull --rebaseしてリトライします"
+              git pull --rebase
+            done
+            if [ "$success" != "1" ]; then
+              echo "3回リトライしてもpushに失敗しました"
+              exit 1
+            fi
           fi
