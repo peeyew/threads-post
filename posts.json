@@ -18,8 +18,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dm4met3kyvs2a5rfadr86o0c5e%26season%3D5acr5nje29o01x4ipyctcips1&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-17T03:27:17.082Z"
+    "status": "posted",
+    "created": "2026-09-17T03:27:17.082Z",
+    "postedAt": "2026-09-17T15:23:51.474Z"
   },
   {
     "contentId": "aueetui0nq0dfiwezemp2tcgk",
@@ -31,5 +32,18 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-17T03:30:03.488Z"
+  },
+  {
+    "contentId": "b900alds13158",
+    "source": "ebook",
+    "body": "特典の10Pだけで元取れそうな気がしてくる。中身も相当力入ってる予感。",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/b900alds13158/b900alds13158pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F6291386%2Fb900alds13158%2F&af_id=peeyew-990&ch=api",
+    "genres": [
+      "アイドル",
+      "グラビア"
+    ],
+    "status": "pending",
+    "created": "2026-09-17T15:23:39.970Z"
   }
 ]
