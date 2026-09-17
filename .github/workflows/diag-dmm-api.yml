@@ -108,15 +108,23 @@ jobs:
               print(' -', item.get('title'))
           "
 
-      - name: GenreSearchでdmmtv_videoのジャンル一覧取得(floor_id判明時のみ)
+      - name: 1件分のitem生レスポンス全フィールドをダンプ(genre以外にジャンル体系がないか確認)
         run: |
-          FID=$(cat dmmtv_floor_id.txt 2>/dev/null || echo "")
-          if [ -z "$FID" ]; then
-            echo "floor_idが特定できなかったためスキップ"
-            exit 0
-          fi
-          echo "floor_id=$FID でGenreSearch実行"
-          curl -s "https://api.dmm.com/affiliate/v3/GenreSearch?api_id=${{ secrets.DMM_API_ID }}&affiliate_id=${{ secrets.DMM_AFFILIATE_ID_THREADS }}&floor_id=$FID&hits=100&output=json" \
+          curl -s "https://api.dmm.com/affiliate/v3/ItemList?api_id=${{ secrets.DMM_API_ID }}&affiliate_id=${{ secrets.DMM_AFFILIATE_ID_THREADS }}&site=DMM.com&service=dmmtv&floor=dmmtv_video&hits=1&sort=rank&keyword=アニメ&output=json" \
+            -o single_item.json
+          python3 -c "
+          import json
+          d = json.load(open('single_item.json'))
+          items = d.get('result', {}).get('items', [])
+          if items:
+              print(json.dumps(items[0], ensure_ascii=False, indent=2))
+          else:
+              print('items空')
+          "
+
+      - name: GenreSearchでdmmtv_video(floor_id=95)のジャンル一覧取得
+        run: |
+          curl -s "https://api.dmm.com/affiliate/v3/GenreSearch?api_id=${{ secrets.DMM_API_ID }}&affiliate_id=${{ secrets.DMM_AFFILIATE_ID_THREADS }}&floor_id=95&hits=500&output=json" \
             -o genre_search.json
           python3 -c "
           import json
@@ -125,5 +133,6 @@ jobs:
           print('status:', r.get('status'), 'message:', r.get('result_message'))
           names = [g.get('name') for g in r.get('genre', [])]
           print('ジャンル総数:', len(names))
+          print('全ジャンル:', names)
           print('アニメ含むジャンル:', [n for n in names if n and 'アニメ' in n])
           "
