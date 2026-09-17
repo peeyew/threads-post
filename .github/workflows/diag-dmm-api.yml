@@ -1,0 +1,91 @@
+name: '[診断用/一時] DMM API調査(FloorList/GenreSearch/ItemList sort検証)'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: FloorList取得・dmmtvのfloor_id特定
+        run: |
+          curl -s "https://api.dmm.com/affiliate/v3/FloorList?api_id=${{ secrets.DMM_API_ID }}&affiliate_id=${{ secrets.DMM_AFFILIATE_ID_THREADS }}&output=json" \
+            -o floorlist.json
+          python3 -c "
+          import json
+          d = json.load(open('floorlist.json'))
+          r = d.get('result', {})
+          print('status:', r.get('status'), 'message:', r.get('result_message'))
+          for site in r.get('site', []):
+              if site.get('name') != 'DMM.com':
+                  continue
+              for service in site.get('service', []):
+                  print('SERVICE:', service.get('name'), service.get('code'))
+                  for floor in service.get('floor', []):
+                      print('  FLOOR:', floor)
+                      if floor.get('code') == 'dmmtv_video':
+                          with open('dmmtv_floor_id.txt', 'w') as f:
+                              f.write(str(floor.get('id', '')))
+          "
+          echo "dmmtv_video floor_id: $(cat dmmtv_floor_id.txt 2>/dev/null || echo '見つからず')"
+
+      - name: ItemList sort検証(date/rank/review)・dmmtv_video
+        run: |
+          for s in date rank review match price; do
+            echo "=== sort=$s ==="
+            curl -s "https://api.dmm.com/affiliate/v3/ItemList?api_id=${{ secrets.DMM_API_ID }}&affiliate_id=${{ secrets.DMM_AFFILIATE_ID_THREADS }}&site=DMM.com&service=dmmtv&floor=dmmtv_video&hits=3&sort=$s&output=json" \
+              -o "sort_$s.json"
+            python3 -c "
+          import json
+          d = json.load(open('sort_$s.json'))
+          r = d.get('result', {})
+          print('status:', r.get('status'), 'message:', r.get('result_message'))
+          for item in r.get('items', [])[:3]:
+              print(' title:', item.get('title'))
+              print(' date:', item.get('date'))
+              print(' review:', item.get('review'))
+              print(' genre:', [g.get('name') for g in item.get('iteminfo', {}).get('genre', [])])
+          "
+          done
+
+      - name: dmmtv_video上位100件のジャンル分布・アニメ該当作品確認
+        run: |
+          curl -s "https://api.dmm.com/affiliate/v3/ItemList?api_id=${{ secrets.DMM_API_ID }}&affiliate_id=${{ secrets.DMM_AFFILIATE_ID_THREADS }}&site=DMM.com&service=dmmtv&floor=dmmtv_video&hits=100&sort=rank&output=json" \
+            -o anime_scan.json
+          python3 -c "
+          import json
+          d = json.load(open('anime_scan.json'))
+          r = d.get('result', {})
+          print('status:', r.get('status'))
+          genre_set = set()
+          anime_titles = []
+          for item in r.get('items', []):
+              genres = [g.get('name') for g in item.get('iteminfo', {}).get('genre', [])]
+              genre_set.update(genres)
+              if any('アニメ' in g for g in genres):
+                  anime_titles.append((item.get('title'), genres))
+          print('出現したジャンル一覧:', sorted(genre_set))
+          print('アニメ関連タイトル件数:', len(anime_titles))
+          for t, g in anime_titles[:10]:
+              print(' -', t, g)
+          "
+
+      - name: GenreSearchでdmmtv_videoのジャンル一覧取得(floor_id判明時のみ)
+        run: |
+          FID=$(cat dmmtv_floor_id.txt 2>/dev/null || echo "")
+          if [ -z "$FID" ]; then
+            echo "floor_idが特定できなかったためスキップ"
+            exit 0
+          fi
+          echo "floor_id=$FID でGenreSearch実行"
+          curl -s "https://api.dmm.com/affiliate/v3/GenreSearch?api_id=${{ secrets.DMM_API_ID }}&affiliate_id=${{ secrets.DMM_AFFILIATE_ID_THREADS }}&floor_id=$FID&hits=100&output=json" \
+            -o genre_search.json
+          python3 -c "
+          import json
+          d = json.load(open('genre_search.json'))
+          r = d.get('result', {})
+          print('status:', r.get('status'), 'message:', r.get('result_message'))
+          names = [g.get('name') for g in r.get('genre', [])]
+          print('ジャンル総数:', len(names))
+          print('アニメ含むジャンル:', [n for n in names if n and 'アニメ' in n])
+          "
