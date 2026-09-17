@@ -1,11 +1,8 @@
 name: DMMブックス Threads自動投稿
 
 on:
-  # schedule:
-  #   - cron: '0 11 * * *'  # 20:00 JST = 11:00 UTC
-  #   ↑ threads_poster.gs(Google Apps Script)側の二重投稿経路が完全に
-  #     止まっていることを確認できるまで、意図的にコメントアウトしている。
-  #     確認が取れたらコメントを外して有効化すること。
+  schedule:
+    - cron: '0 11 * * *'  # 20:00 JST = 11:00 UTC
   workflow_dispatch:
     inputs:
       dry_run:
