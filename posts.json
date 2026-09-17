@@ -30,8 +30,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Daoyeeogogk0g9sogqdszka6ok%26season%3Daueetui0nq0dfiwezemp2tcgk&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-17T03:30:03.488Z"
+    "status": "posted",
+    "created": "2026-09-17T03:30:03.488Z",
+    "postedAt": "2026-09-17T23:57:29.950Z"
   },
   {
     "contentId": "b900alds13158",
@@ -45,5 +46,16 @@
     ],
     "status": "pending",
     "created": "2026-09-17T15:23:39.970Z"
+  },
+  {
+    "contentId": "f1n1c8jjdd8oy544h0xhi9xay",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "舞台裏の緊張感まで映してくれるから、華やかさだけじゃない重みが残る作品",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Df1n1c8jjdd8oy544h0xhi9xay%26season%3Df1n1c8jjdd8oy544h0xhi9xay&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-17T23:57:22.590Z"
   }
 ]
