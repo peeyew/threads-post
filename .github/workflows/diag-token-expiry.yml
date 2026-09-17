@@ -1,0 +1,25 @@
+name: '[診断用/一時] THREADS_ACCESS_TOKEN有効期限確認'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: debug_tokenで有効期限を確認(トークン自体はログに出さない)
+        run: |
+          RESPONSE=$(curl -s -X GET "https://graph.threads.net/debug_token?input_token=${{ secrets.THREADS_ACCESS_TOKEN }}&access_token=${{ secrets.THREADS_ACCESS_TOKEN }}")
+          echo "$RESPONSE" | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          # トークン文字列自体は絶対に出力しない
+          d = data.get('data', data)
+          for k in ('is_valid', 'expires_at', 'data_access_expires_at', 'scopes', 'type', 'app_id', 'error'):
+              if k in d:
+                  print(f'{k}: {d[k]}')
+          import datetime
+          for k in ('expires_at', 'data_access_expires_at'):
+              if k in d and isinstance(d[k], int):
+                  print(f'{k}(UTC): {datetime.datetime.utcfromtimestamp(d[k]).isoformat()}')
+          "
