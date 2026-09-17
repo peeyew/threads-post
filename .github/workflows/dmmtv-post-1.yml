@@ -26,6 +26,7 @@ jobs:
         run: node fetch-dmm.js
         env:
           DMM_SLOT: dmmtv
+          DMM_TV_MODE: latest
           DMM_API_ID: ${{ secrets.DMM_API_ID }}
           DMM_AFFILIATE_ID_THREADS: ${{ secrets.DMM_AFFILIATE_ID_THREADS }}
           DMM_HITS: '1'

@@ -9,6 +9,18 @@
 //   ebook → DMMブックス（service=ebook, floor=comic/photo/novel/otherbooksからランダム1つ）。
 //           1日1枠。こちらはimageURLが必須（画像付きIMAGE投稿にするため）。
 //
+// 【DMM_TV_MODE（DMM_SLOT=dmmtvの場合のみ有効）について】
+// DMM TVのアニメジャンル投稿を「最新作」「過去の人気作」の2系統に分けるための指定。
+// dmmtv_videoのItemList APIレスポンスにはgenre情報が構造的に存在しない（iteminfo自体が
+// 返らない）ため、ジャンル絞り込みはkeyword=アニメによるキーワード検索で代用する
+// （実データ確認済み: sort/GenreSearch APIともにdmmtv_videoのジャンルマスタは未整備）。
+// keyword検索はタイトル・説明文に「アニメ」が含まれる非アニメ作品（恋愛リアリティ系等）
+// を誤ってヒットさせることがあるため、精度は完全ではない。運用しながら見つかった誤爆は
+// config/dmmtv-anime-exclude-words.jsonに追記して弾く方針（方針B）。
+//   latest  → sort=date（新着順）
+//   popular → sort=review（評価順。「過去の人気作」の指標として件数より平均評価を採用）
+// 未指定の場合は従来通りsort=rank・keywordなしのランキング取得を維持する。
+//
 // 【1cron実行=1投稿の設計について】
 // TARGET_COUNTのデフォルトは1。post-threads.js側は「posts.json中の先頭のpendingを
 // 1件だけ消化する」実装のため、TARGET_COUNTを1より大きくすると消化が追いつかず
@@ -41,6 +53,17 @@ const EBOOK_FLOORS = ['comic', 'photo', 'novel', 'otherbooks'];
 const SERVICE = SLOT === 'dmmtv' ? 'dmmtv' : 'ebook';
 const FLOOR = process.env.DMM_FLOOR
   || (SLOT === 'dmmtv' ? 'dmmtv_video' : EBOOK_FLOORS[Math.floor(Math.random() * EBOOK_FLOORS.length)]);
+
+// DMM_TV_MODE: DMM_SLOT=dmmtvの場合のみ意味を持つ。'latest'(新着順)または'popular'(評価順)。
+// 未指定なら従来通りランキング取得（sort=rank・keywordなし）を維持する。
+const DMM_TV_MODE = process.env.DMM_TV_MODE;
+if (DMM_TV_MODE && !['latest', 'popular'].includes(DMM_TV_MODE)) {
+  console.error(`DMM_TV_MODEは'latest'または'popular'を指定してください（実際: ${DMM_TV_MODE}）`);
+  process.exit(1);
+}
+const SORT = DMM_TV_MODE === 'latest' ? 'date' : DMM_TV_MODE === 'popular' ? 'review' : 'rank';
+// dmmtv_videoのItemList APIはgenre情報を返さないため、ジャンル絞り込みはkeyword検索で代用する
+const KEYWORD = SLOT === 'dmmtv' && DMM_TV_MODE ? 'アニメ' : '';
 
 // DMM TVはItemList APIがimageURLを返さないため、画像なし(TEXT投稿)を許容する。
 // DMMブックスは画像付きIMAGE投稿にする方針のため、imageURLがない商品は除外する。
@@ -80,10 +103,17 @@ const excludedIds = new Set([...validPostedIds, ...pendingIds]);
 // NGワードフィルタ（未成年を想起させる語を含む商品はposts.jsonに書き込まない）
 // リストはconfig/ng-words.jsonで管理（要調整時はそちらだけ編集すればよい）
 const ngWords = JSON.parse(readFileSync('./config/ng-words.json', 'utf-8'));
-const hasNgWord = title => ngWords.some(word => title.includes(word));
+// DMM TVのkeyword=アニメ検索は非アニメ作品（恋愛リアリティ系等）を誤って拾うことがあるため、
+// DMM_TV_MODE指定時のみ追加の除外ワードリストも適用する（運用しながら都度追記する方針）。
+const animeExcludeWords = DMM_TV_MODE && existsSync('./config/dmmtv-anime-exclude-words.json')
+  ? JSON.parse(readFileSync('./config/dmmtv-anime-exclude-words.json', 'utf-8'))
+  : [];
+const allExcludeWords = [...ngWords, ...animeExcludeWords];
+const hasNgWord = title => allExcludeWords.some(word => title.includes(word));
 
 async function fetchPage(offset) {
-  const url = `https://api.dmm.com/affiliate/v3/ItemList?api_id=${API_ID}&affiliate_id=${AFFILIATE_ID}&site=${SITE}&service=${SERVICE}&floor=${FLOOR}&hits=${PAGE_SIZE}&offset=${offset}&sort=rank&output=json`;
+  const keywordParam = KEYWORD ? `&keyword=${encodeURIComponent(KEYWORD)}` : '';
+  const url = `https://api.dmm.com/affiliate/v3/ItemList?api_id=${API_ID}&affiliate_id=${AFFILIATE_ID}&site=${SITE}&service=${SERVICE}&floor=${FLOOR}&hits=${PAGE_SIZE}&offset=${offset}&sort=${SORT}${keywordParam}&output=json`;
   const res = await fetch(url);
   const data = await res.json();
   const result = data.result;
@@ -100,7 +130,7 @@ async function fetchPage(offset) {
   }));
 }
 
-console.log(`DMM.com一般(${SERVICE}/${FLOOR})ランキング取得中...`);
+console.log(`DMM.com一般(${SERVICE}/${FLOOR})sort=${SORT}${KEYWORD ? `&keyword=${KEYWORD}` : ''}${DMM_TV_MODE ? `[variant=${DMM_TV_MODE}]` : ''}取得中...`);
 
 const newPosts = [];
 let skippedNg = 0;
@@ -151,6 +181,7 @@ try {
       newPosts.push({
         contentId: item.contentId,
         source: SLOT,
+        ...(DMM_TV_MODE ? { variant: DMM_TV_MODE } : {}),
         body,
         imageUrl: item.imageUrl || '',
         url: item.url,

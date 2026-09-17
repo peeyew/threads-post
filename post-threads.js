@@ -119,7 +119,7 @@ if (DRY_RUN) {
     console.log('[DRY_RUN] リプライ:');
     console.log(replyText);
   }
-  console.log(`[DRY_RUN] source: ${next.source}`);
+  console.log(`[DRY_RUN] source: ${next.source}${next.variant ? ` (variant: ${next.variant})` : ''}`);
   console.log(`[DRY_RUN] genres: ${(next.genres || []).join(', ') || '(なし)'}`);
   console.log('[DRY_RUN] 実際の投稿・posts.json/posted-ids.json更新・GAS送信は行いません');
   process.exit(0);
