@@ -68,8 +68,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dshrsc3om4iudpshvkhpefwxx0%26season%3Djqrb6mij4ay7z043p9i1oec9w&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-18T07:12:53.175Z"
+    "status": "posted",
+    "created": "2026-09-18T07:12:53.175Z",
+    "postedAt": "2026-09-18T23:56:22.311Z"
   },
   {
     "contentId": "b217afuso04834",
@@ -85,5 +86,16 @@
     ],
     "status": "pending",
     "created": "2026-09-18T14:43:33.239Z"
+  },
+  {
+    "contentId": "t4950ubnapf5eij88k7qa3nzm",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "聖女より裏方の方が向いてる自覚あるヒロイン、220円でその割り切り具合が見れるの得な気がする",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dh1q4xih9sbj8fhgm706hjs2di%26season%3Dt4950ubnapf5eij88k7qa3nzm&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-18T23:56:12.829Z"
   }
 ]
