@@ -44,8 +44,9 @@
       "アイドル",
       "グラビア"
     ],
-    "status": "pending",
-    "created": "2026-09-17T15:23:39.970Z"
+    "status": "posted",
+    "created": "2026-09-17T15:23:39.970Z",
+    "postedAt": "2026-09-18T07:13:04.443Z"
   },
   {
     "contentId": "f1n1c8jjdd8oy544h0xhi9xay",
@@ -57,5 +58,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-17T23:57:22.590Z"
+  },
+  {
+    "contentId": "jqrb6mij4ay7z043p9i1oec9w",
+    "source": "dmmtv",
+    "variant": "popular",
+    "body": "謎解きしながら変身するプリキュアって新しい発想だな、550円ならとりあえず1話見てみたくなる",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dshrsc3om4iudpshvkhpefwxx0%26season%3Djqrb6mij4ay7z043p9i1oec9w&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-18T07:12:53.175Z"
   }
 ]
