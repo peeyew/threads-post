@@ -56,8 +56,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Df1n1c8jjdd8oy544h0xhi9xay%26season%3Df1n1c8jjdd8oy544h0xhi9xay&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-17T23:57:22.590Z"
+    "status": "posted",
+    "created": "2026-09-17T23:57:22.590Z",
+    "postedAt": "2026-09-18T14:43:41.764Z"
   },
   {
     "contentId": "jqrb6mij4ay7z043p9i1oec9w",
@@ -69,5 +70,20 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-18T07:12:53.175Z"
+  },
+  {
+    "contentId": "b217afuso04834",
+    "source": "ebook",
+    "body": "オフコートでの表情、コート内とは別人みたいで見入ってしまった。限定特典の映像まで込みでこの価格なら納得感ある。",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/b217afuso04834/b217afuso04834pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F6290950%2Fb217afuso04834%2F&af_id=peeyew-990&ch=api",
+    "genres": [
+      "アイドル",
+      "グラビア",
+      "水着",
+      "独占販売"
+    ],
+    "status": "pending",
+    "created": "2026-09-18T14:43:33.239Z"
   }
 ]
