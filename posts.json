@@ -84,8 +84,9 @@
       "水着",
       "独占販売"
     ],
-    "status": "pending",
-    "created": "2026-09-18T14:43:33.239Z"
+    "status": "posted",
+    "created": "2026-09-18T14:43:33.239Z",
+    "postedAt": "2026-09-19T07:10:28.779Z"
   },
   {
     "contentId": "t4950ubnapf5eij88k7qa3nzm",
@@ -97,5 +98,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-18T23:56:12.829Z"
+  },
+  {
+    "contentId": "ahzifwi60bcqnfxp31bviq5p0",
+    "source": "dmmtv",
+    "variant": "popular",
+    "body": "夢を追う姿を全力で描いてる感じ、応援したくなる熱量が伝わってくる。550円で確かめてみたい",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dfsvj7hzhkzkhvofipd5s2i359%26season%3Dahzifwi60bcqnfxp31bviq5p0&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-19T07:10:18.565Z"
   }
 ]
