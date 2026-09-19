@@ -96,8 +96,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dh1q4xih9sbj8fhgm706hjs2di%26season%3Dt4950ubnapf5eij88k7qa3nzm&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-18T23:56:12.829Z"
+    "status": "posted",
+    "created": "2026-09-18T23:56:12.829Z",
+    "postedAt": "2026-09-19T14:05:15.942Z"
   },
   {
     "contentId": "ahzifwi60bcqnfxp31bviq5p0",
@@ -109,5 +110,15 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-19T07:10:18.565Z"
+  },
+  {
+    "contentId": "s230asnph00181",
+    "source": "ebook",
+    "body": "千秋楽の空気感まで一冊に閉じ込めてる感じ、電子版でも見応え十分。2200円は記念に残る買い物かも",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/s230asnph00181/s230asnph00181pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F6294658%2Fs230asnph00181%2F&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-19T14:05:05.501Z"
   }
 ]
