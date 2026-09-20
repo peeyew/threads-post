@@ -119,8 +119,9 @@
     "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/s230asnph00181/s230asnph00181pl.jpg",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F6294658%2Fs230asnph00181%2F&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-19T14:05:05.501Z"
+    "status": "posted",
+    "created": "2026-09-19T14:05:05.501Z",
+    "postedAt": "2026-09-20T07:35:42.207Z"
   },
   {
     "contentId": "a38iu91u23dnqytzam0y2an2o",
@@ -132,5 +133,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-19T23:56:26.471Z"
+  },
+  {
+    "contentId": "18ciuvd33toh6phwae3iesqrj",
+    "source": "dmmtv",
+    "variant": "popular",
+    "body": "等価交換の代償、大人になって見返すと重さが違って刺さる。550円でまた確かめたくなった",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dch1eu0v3xnx6ym722hv6vj3j8%26season%3D18ciuvd33toh6phwae3iesqrj&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-20T07:35:31.030Z"
   }
 ]
