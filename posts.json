@@ -131,8 +131,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D8ujqmgg1h9nfw203usk8wzye4%26season%3Da38iu91u23dnqytzam0y2an2o&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-19T23:56:26.471Z"
+    "status": "posted",
+    "created": "2026-09-19T23:56:26.471Z",
+    "postedAt": "2026-09-20T14:24:13.433Z"
   },
   {
     "contentId": "18ciuvd33toh6phwae3iesqrj",
@@ -144,5 +145,18 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-20T07:35:31.030Z"
+  },
+  {
+    "contentId": "b163cijt231522",
+    "source": "ebook",
+    "body": "後宮の腹芸を生き抜く胆力、悪女ってより策士寄りだよな。1430円でその駆け引き堪能できる",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/b163cijt231522/b163cijt231522pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F4048681%2Fb163cijt231522%2F&af_id=peeyew-990&ch=api",
+    "genres": [
+      "ファンタジー",
+      "日本文学"
+    ],
+    "status": "pending",
+    "created": "2026-09-20T14:24:04.620Z"
   }
 ]
