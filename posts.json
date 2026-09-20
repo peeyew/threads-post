@@ -143,8 +143,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dch1eu0v3xnx6ym722hv6vj3j8%26season%3D18ciuvd33toh6phwae3iesqrj&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-20T07:35:31.030Z"
+    "status": "posted",
+    "created": "2026-09-20T07:35:31.030Z",
+    "postedAt": "2026-09-20T23:55:18.584Z"
   },
   {
     "contentId": "b163cijt231522",
@@ -158,5 +159,16 @@
     ],
     "status": "pending",
     "created": "2026-09-20T14:24:04.620Z"
+  },
+  {
+    "contentId": "g2mxmdcfkuu69k4ejz4ognv2d",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "後衛職なのに戦況を support どころか支配してる、その差配っぷりが220円で見られるの安い",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Ddpqhhwc3ah7di226zsabtghuc%26season%3Dg2mxmdcfkuu69k4ejz4ognv2d&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-20T23:55:09.495Z"
   }
 ]
