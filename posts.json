@@ -157,8 +157,9 @@
       "ファンタジー",
       "日本文学"
     ],
-    "status": "pending",
-    "created": "2026-09-20T14:24:04.620Z"
+    "status": "posted",
+    "created": "2026-09-20T14:24:04.620Z",
+    "postedAt": "2026-09-21T07:47:19.896Z"
   },
   {
     "contentId": "g2mxmdcfkuu69k4ejz4ognv2d",
@@ -170,5 +171,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-20T23:55:09.495Z"
+  },
+  {
+    "contentId": "5497faap00698",
+    "source": "dmmtv",
+    "variant": "popular",
+    "body": "同じ部屋に居るだけで距離感がリアルすぎる、VRだと逃げ場ないの分かってて400円払ってしまった",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5497faap00698%26season%3D5497faap00698&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-21T07:47:09.620Z"
   }
 ]
