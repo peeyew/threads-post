@@ -169,8 +169,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Ddpqhhwc3ah7di226zsabtghuc%26season%3Dg2mxmdcfkuu69k4ejz4ognv2d&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-20T23:55:09.495Z"
+    "status": "posted",
+    "created": "2026-09-20T23:55:09.495Z",
+    "postedAt": "2026-09-21T16:43:50.251Z"
   },
   {
     "contentId": "5497faap00698",
@@ -182,5 +183,21 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-21T07:47:09.620Z"
+  },
+  {
+    "contentId": "b950athes06764",
+    "source": "ebook",
+    "body": "両さんの小遣い稼ぎ、令和に読んでも発想が全然古びてない。693円でこの巻数感、正直コスパ良すぎる",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/b950athes06764/b950athes06764pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F56919%2Fb950athes06764%2F&af_id=peeyew-990&ch=api",
+    "genres": [
+      "社会派",
+      "ギャグ・コメディ",
+      "アニメ化",
+      "映画化・ドラマ化・実写化",
+      "完結"
+    ],
+    "status": "pending",
+    "created": "2026-09-21T16:43:44.078Z"
   }
 ]
