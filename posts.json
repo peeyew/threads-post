@@ -210,8 +210,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dd5uribyb0p8uw2iu4k60wfrjh%26season%3Dd5uribyb0p8uw2iu4k60wfrjh&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-22T00:37:56.613Z"
+    "status": "posted",
+    "created": "2026-09-22T00:37:56.613Z",
+    "postedAt": "2026-09-22T15:19:31.583Z"
   },
   {
     "contentId": "5we1qbpheeayum13fque99i1q",
@@ -223,5 +224,18 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-22T07:30:13.187Z"
+  },
+  {
+    "contentId": "b000fhftx15843",
+    "source": "ebook",
+    "body": "荒廃した世界で武装再構築していく過程、設定の作り込みが半端ない。1705円でこの没入感は破格かも",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/b000fhftx15843/b000fhftx15843pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F864275%2Fb000fhftx15843%2F&af_id=peeyew-990&ch=api",
+    "genres": [
+      "ファンタジー",
+      "新文芸"
+    ],
+    "status": "pending",
+    "created": "2026-09-22T15:19:22.024Z"
   }
 ]
