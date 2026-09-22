@@ -181,8 +181,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5497faap00698%26season%3D5497faap00698&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-21T07:47:09.620Z"
+    "status": "posted",
+    "created": "2026-09-21T07:47:09.620Z",
+    "postedAt": "2026-09-22T00:38:04.472Z"
   },
   {
     "contentId": "b950athes06764",
@@ -199,5 +200,16 @@
     ],
     "status": "pending",
     "created": "2026-09-21T16:43:44.078Z"
+  },
+  {
+    "contentId": "d5uribyb0p8uw2iu4k60wfrjh",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "劇場のライブ感そのまま画面で味わえるとは、440円でこの満足度は得すぎる気がする",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dd5uribyb0p8uw2iu4k60wfrjh%26season%3Dd5uribyb0p8uw2iu4k60wfrjh&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-22T00:37:56.613Z"
   }
 ]
