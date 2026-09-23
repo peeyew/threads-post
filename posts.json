@@ -236,8 +236,9 @@
       "ファンタジー",
       "新文芸"
     ],
-    "status": "pending",
-    "created": "2026-09-22T15:19:22.024Z"
+    "status": "posted",
+    "created": "2026-09-22T15:19:22.024Z",
+    "postedAt": "2026-09-23T07:33:44.310Z"
   },
   {
     "contentId": "5013tsds43115",
@@ -249,5 +250,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-23T00:05:29.186Z"
+  },
+  {
+    "contentId": "28ca4ubpamwb3o19jsdagrcdi",
+    "source": "dmmtv",
+    "variant": "popular",
+    "body": "吹奏楽の部活動、青春の泥臭さがちゃんと痛い。550円で久美子たちの葛藤に浸れるのは贅沢すぎる",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Drf64uireycthc94eyvp3s6814%26season%3D28ca4ubpamwb3o19jsdagrcdi&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-23T07:33:32.659Z"
   }
 ]
