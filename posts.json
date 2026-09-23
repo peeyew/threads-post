@@ -222,8 +222,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5we1qbpheeayum13fque99i1q%26season%3D5we1qbpheeayum13fque99i1q&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-22T07:30:13.187Z"
+    "status": "posted",
+    "created": "2026-09-22T07:30:13.187Z",
+    "postedAt": "2026-09-23T00:05:37.911Z"
   },
   {
     "contentId": "b000fhftx15843",
@@ -237,5 +238,16 @@
     ],
     "status": "pending",
     "created": "2026-09-22T15:19:22.024Z"
+  },
+  {
+    "contentId": "5013tsds43115",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "猫目さゆの佇まい、画面越しでもやけに引き込まれる。3280円、じっくり眺める価値ありそう",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5013tsds43115%26season%3D5013tsds43115&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-23T00:05:29.186Z"
   }
 ]
