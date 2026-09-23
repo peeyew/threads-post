@@ -248,8 +248,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5013tsds43115%26season%3D5013tsds43115&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-23T00:05:29.186Z"
+    "status": "posted",
+    "created": "2026-09-23T00:05:29.186Z",
+    "postedAt": "2026-09-23T15:15:02.519Z"
   },
   {
     "contentId": "28ca4ubpamwb3o19jsdagrcdi",
@@ -261,5 +262,21 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-23T07:33:32.659Z"
+  },
+  {
+    "contentId": "b950kshes00105",
+    "source": "ebook",
+    "body": "決闘の熱量、モノクロで読み返すとまた違う緊張感がある。700円でシリーズ丸ごと味わえるのは正直嬉しい",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/b950kshes00105/b950kshes00105pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F57028%2Fb950kshes00105%2F&af_id=peeyew-990&ch=api",
+    "genres": [
+      "友情",
+      "ファンタジー",
+      "アニメ化",
+      "ゲーム化",
+      "完結"
+    ],
+    "status": "pending",
+    "created": "2026-09-23T15:14:54.705Z"
   }
 ]
