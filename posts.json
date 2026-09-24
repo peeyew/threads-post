@@ -301,8 +301,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5162stage260803%26season%3D5162stage260803&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-24T01:18:11.851Z"
+    "status": "posted",
+    "created": "2026-09-24T01:18:11.851Z",
+    "postedAt": "2026-09-24T15:39:10.703Z"
   },
   {
     "contentId": "9sx4x51btx9f01k8ug8airn9d",
@@ -314,5 +315,21 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-24T07:25:54.639Z"
+  },
+  {
+    "contentId": "b600atgk06484",
+    "source": "ebook",
+    "body": "比企谷の皮肉屋な独白、何度読んでも刺さるところが違う。814円で青春の痛さ再確認できる",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/b600atgk06484/b600atgk06484pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F641097%2Fb600atgk06484%2F&af_id=peeyew-990&ch=api",
+    "genres": [
+      "ラブコメ",
+      "アニメ化",
+      "学園もの",
+      "ノベライズ",
+      "映画化・ドラマ化・実写化"
+    ],
+    "status": "pending",
+    "created": "2026-09-24T15:39:02.437Z"
   }
 ]
