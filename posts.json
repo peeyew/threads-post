@@ -260,8 +260,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Drf64uireycthc94eyvp3s6814%26season%3D28ca4ubpamwb3o19jsdagrcdi&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-23T07:33:32.659Z"
+    "status": "posted",
+    "created": "2026-09-23T07:33:32.659Z",
+    "postedAt": "2026-09-24T00:16:59.997Z"
   },
   {
     "contentId": "b950kshes00105",
@@ -278,5 +279,16 @@
     ],
     "status": "pending",
     "created": "2026-09-23T15:14:54.705Z"
+  },
+  {
+    "contentId": "tpzwu681rs7x5n5uyx0uqfsi2",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "子供の頃観た人も、チャポンの活躍で意外と泣けるかもしれない。440円で親子時間にちょうどいい",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dtpzwu681rs7x5n5uyx0uqfsi2%26season%3Dtpzwu681rs7x5n5uyx0uqfsi2&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-24T00:16:51.320Z"
   }
 ]
