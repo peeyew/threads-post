@@ -289,8 +289,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dtpzwu681rs7x5n5uyx0uqfsi2%26season%3Dtpzwu681rs7x5n5uyx0uqfsi2&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-24T00:16:51.320Z"
+    "status": "posted",
+    "created": "2026-09-24T00:16:51.320Z",
+    "postedAt": "2026-09-24T07:26:03.185Z"
   },
   {
     "contentId": "5162stage260803",
@@ -302,5 +303,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-24T01:18:11.851Z"
+  },
+  {
+    "contentId": "9sx4x51btx9f01k8ug8airn9d",
+    "source": "dmmtv",
+    "variant": "popular",
+    "body": "卒業してもあの空気感、変わらず流れてるのがずるい。550円で軽音部にまた入部できる幸せ",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D9sx4x51btx9f01k8ug8airn9d%26season%3D9sx4x51btx9f01k8ug8airn9d&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-24T07:25:54.639Z"
   }
 ]
