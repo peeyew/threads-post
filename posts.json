@@ -277,8 +277,9 @@
       "ゲーム化",
       "完結"
     ],
-    "status": "pending",
-    "created": "2026-09-23T15:14:54.705Z"
+    "status": "posted",
+    "created": "2026-09-23T15:14:54.705Z",
+    "postedAt": "2026-09-24T01:18:23.935Z"
   },
   {
     "contentId": "tpzwu681rs7x5n5uyx0uqfsi2",
@@ -290,5 +291,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-24T00:16:51.320Z"
+  },
+  {
+    "contentId": "5162stage260803",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "舞台版でレゼの得体の知れなさがどう表現されるのか気になって観てしまった、生の緊張感が独特",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5162stage260803%26season%3D5162stage260803&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-24T01:18:11.851Z"
   }
 ]
