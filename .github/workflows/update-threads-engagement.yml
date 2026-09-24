@@ -1,0 +1,21 @@
+name: Threadsエンゲージメント更新
+
+on:
+  schedule:
+    - cron: '30 21 * * *'  # 06:30 JST = 前日21:30 UTC（X側の更新と時刻をずらす）
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - name: Threadsインサイト更新
+        run: node update-threads-engagement.js
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          GAS_ENDPOINT: ${{ secrets.GAS_ENDPOINT }}

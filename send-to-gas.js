@@ -1,6 +1,6 @@
 // GAS Web AppエンドポイントにエンゲージメントデータをPOSTするヘルパー
-// x-auto-post/send-to-gas.jsと同一実装。X/Threads統合済みのengagement-recorder.gsに
-// platform: 'threads' を明示して送る（呼び出し元のfetch-dmm.js/post-threads.js側で付与）。
+// x-auto-post/send-to-gas.jsと同一実装。engagement-recorder.gsはplatform: 'threads'を
+// 同一スプレッドシート内のthreadsタブに振り分ける（Xのengagementタブとは混ぜない）。
 
 const GAS_ENDPOINT = process.env.GAS_ENDPOINT;
 

@@ -22,6 +22,7 @@
 import dotenv from 'dotenv';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { sendToGAS } from './send-to-gas.js';
+import { isValidThreadsId, fetchThreadsInsights } from './threads-insights.js';
 
 dotenv.config();
 
@@ -150,17 +151,29 @@ next.postedAt = new Date().toISOString();
 writeFileSync(postsFile, JSON.stringify(posts, null, 2), 'utf-8');
 recordPostedId(next.contentId);
 
-await sendToGAS({
-  id: mainPublishedId,
-  type: next.source,
-  keyword: next.body?.slice(0, 30) || '',
-  genres: (next.genres || []).join(', '),
-  platform: 'threads',
-  likes: 0,
-  retweets: 0,
-  replies: 0,
-  postedAt: next.postedAt,
-});
+// ── engagementスプレッドシートのthreadsタブに初回記録する ──
+// 投稿直後のインサイトはほぼ0だが、行を確定させておけば日次のupdate-threads-engagement.jsが
+// 以降の値を更新する。インサイト取得の失敗は致命的でないため、その場合は指標を空欄のまま記録する。
+// 公開IDが数字以外（診断・テスト残骸など）の場合はシートを汚さないよう書き込まない。
+if (!isValidThreadsId(mainPublishedId)) {
+  console.error(`Threads投稿IDが不正なためエンゲージメント記録をスキップ: ${JSON.stringify(mainPublishedId)}`);
+} else {
+  let insights = {};
+  try {
+    insights = await fetchThreadsInsights(mainPublishedId, ACCESS_TOKEN);
+  } catch (err) {
+    console.error('インサイト取得失敗（指標は空欄で記録）:', err.message);
+  }
+  await sendToGAS({
+    id: mainPublishedId,
+    type: next.source,
+    keyword: next.body?.slice(0, 30) || '',
+    genres: (next.genres || []).join(', '),
+    platform: 'threads',
+    postedAt: next.postedAt,
+    ...insights,
+  });
+}
 
 // ── リプライ投稿（本体確定後の非致命的な処理。失敗してもexit(1)しない） ──
 if (replyText) {
