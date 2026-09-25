@@ -313,8 +313,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D9sx4x51btx9f01k8ug8airn9d%26season%3D9sx4x51btx9f01k8ug8airn9d&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-24T07:25:54.639Z"
+    "status": "posted",
+    "created": "2026-09-24T07:25:54.639Z",
+    "postedAt": "2026-09-25T00:19:35.860Z"
   },
   {
     "contentId": "b600atgk06484",
@@ -331,5 +332,16 @@
     ],
     "status": "pending",
     "created": "2026-09-24T15:39:02.437Z"
+  },
+  {
+    "contentId": "5790mizu00061",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "桃木兎羽のタイトルに\"純白\"って付くと、逆に何が始まるのか身構えてしまう。2500円は覚悟の値段かもしれない",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5790mizu00061%26season%3D5790mizu00061&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-25T00:19:27.892Z"
   }
 ]
