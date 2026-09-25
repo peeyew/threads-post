@@ -342,8 +342,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5790mizu00061%26season%3D5790mizu00061&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-25T00:19:27.892Z"
+    "status": "posted",
+    "created": "2026-09-25T00:19:27.892Z",
+    "postedAt": "2026-09-25T15:42:09.479Z"
   },
   {
     "contentId": "4dwoqzzrc56p9zzahxz26xsnc",
@@ -355,5 +356,17 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-25T07:22:16.400Z"
+  },
+  {
+    "contentId": "s946ahezj00004",
+    "source": "ebook",
+    "body": "建姫たちのディテール、こんなに描き込まれてたのかと画集で初めて気づいた。3300円でコレクション欲が刺激される",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/s946ahezj00004/s946ahezj00004pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F6292365%2Fs946ahezj00004%2F&af_id=peeyew-990&ch=api",
+    "genres": [
+      "イラスト集"
+    ],
+    "status": "pending",
+    "created": "2026-09-25T15:42:00.751Z"
   }
 ]
