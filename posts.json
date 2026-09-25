@@ -330,8 +330,9 @@
       "ノベライズ",
       "映画化・ドラマ化・実写化"
     ],
-    "status": "pending",
-    "created": "2026-09-24T15:39:02.437Z"
+    "status": "posted",
+    "created": "2026-09-24T15:39:02.437Z",
+    "postedAt": "2026-09-25T07:22:27.277Z"
   },
   {
     "contentId": "5790mizu00061",
@@ -343,5 +344,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-25T00:19:27.892Z"
+  },
+  {
+    "contentId": "4dwoqzzrc56p9zzahxz26xsnc",
+    "source": "dmmtv",
+    "variant": "popular",
+    "body": "感情を捨てたはずの霊幽が、一番人間くさく見える瞬間があるんだよな。550円で百パーセント越えの世界を覗ける",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dsfnajnwzqsptdgtgohmjdq3w6%26season%3D4dwoqzzrc56p9zzahxz26xsnc&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-25T07:22:16.400Z"
   }
 ]
