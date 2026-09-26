@@ -367,8 +367,9 @@
     "genres": [
       "イラスト集"
     ],
-    "status": "pending",
-    "created": "2026-09-25T15:42:00.751Z"
+    "status": "posted",
+    "created": "2026-09-25T15:42:00.751Z",
+    "postedAt": "2026-09-26T07:18:15.016Z"
   },
   {
     "contentId": "5790mizu00053",
@@ -380,5 +381,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-26T00:24:48.012Z"
+  },
+  {
+    "contentId": "szy4xzc1sx8s9art7wwh7wax0",
+    "source": "dmmtv",
+    "variant": "popular",
+    "body": "優しさと寂しさが同居する妖たちの話、何回見ても涙腺がゆるむ。550円でニャンコ先生にまた癒される",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Djnmwvusf1r7rjkfe60wa2uegd%26season%3Dszy4xzc1sx8s9art7wwh7wax0&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-26T07:18:04.459Z"
   }
 ]
