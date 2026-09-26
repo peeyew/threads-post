@@ -379,8 +379,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5790mizu00053%26season%3D5790mizu00053&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-26T00:24:48.012Z"
+    "status": "posted",
+    "created": "2026-09-26T00:24:48.012Z",
+    "postedAt": "2026-09-26T14:49:49.689Z"
   },
   {
     "contentId": "szy4xzc1sx8s9art7wwh7wax0",
@@ -392,5 +393,20 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-26T07:18:04.459Z"
+  },
+  {
+    "contentId": "b950lshes00270",
+    "source": "ebook",
+    "body": "太公望の飄々とした策略、何周読んでも痛快さが色褪せない。429円で仙界の争いに巻き込まれる夜もいい",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/b950lshes00270/b950lshes00270pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F104988%2Fb950lshes00270%2F&af_id=peeyew-990&ch=api",
+    "genres": [
+      "バトル・アクション",
+      "SF",
+      "歴史・時代劇・戦記",
+      "完結"
+    ],
+    "status": "pending",
+    "created": "2026-09-26T14:49:41.390Z"
   }
 ]
