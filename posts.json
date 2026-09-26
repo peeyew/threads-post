@@ -354,8 +354,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dsfnajnwzqsptdgtgohmjdq3w6%26season%3D4dwoqzzrc56p9zzahxz26xsnc&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-25T07:22:16.400Z"
+    "status": "posted",
+    "created": "2026-09-25T07:22:16.400Z",
+    "postedAt": "2026-09-26T00:24:59.166Z"
   },
   {
     "contentId": "s946ahezj00004",
@@ -368,5 +369,16 @@
     ],
     "status": "pending",
     "created": "2026-09-25T15:42:00.751Z"
+  },
+  {
+    "contentId": "5790mizu00053",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "吉田優花のタイトル通り、瞬き一つで空気が変わる感じがずるい。2500円で何度も見返したくなる予感",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5790mizu00053%26season%3D5790mizu00053&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-26T00:24:48.012Z"
   }
 ]
