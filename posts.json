@@ -407,8 +407,9 @@
       "歴史・時代劇・戦記",
       "完結"
     ],
-    "status": "pending",
-    "created": "2026-09-26T14:49:41.390Z"
+    "status": "posted",
+    "created": "2026-09-26T14:49:41.390Z",
+    "postedAt": "2026-09-27T07:49:56.089Z"
   },
   {
     "contentId": "z0jqbbpun2aj0qkm1d5fd36j",
@@ -420,5 +421,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-27T00:19:31.989Z"
+  },
+  {
+    "contentId": "81tvwwqdzb52ov637tu0m8s4j",
+    "source": "dmmtv",
+    "variant": "popular",
+    "body": "楽器と青春がやたら眩しい作品、音楽ユニットもの好きなら刺さるはず。550円であの世界にまた浸れる",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5q7dd4s2riw201h7vojbwqtsg%26season%3D81tvwwqdzb52ov637tu0m8s4j&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-27T07:49:44.029Z"
   }
 ]
