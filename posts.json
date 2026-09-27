@@ -419,8 +419,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dz0jqbbpun2aj0qkm1d5fd36j%26season%3Dz0jqbbpun2aj0qkm1d5fd36j&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-27T00:19:31.989Z"
+    "status": "posted",
+    "created": "2026-09-27T00:19:31.989Z",
+    "postedAt": "2026-09-27T15:29:00.421Z"
   },
   {
     "contentId": "81tvwwqdzb52ov637tu0m8s4j",
@@ -432,5 +433,18 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-27T07:49:44.029Z"
+  },
+  {
+    "contentId": "b477bryse09301",
+    "source": "ebook",
+    "body": "週刊誌の見出し、パラ見のつもりが結局全部読んでしまう構成力。650円で今週の芸能事情に詳しくなれる",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/b477bryse09301/b477bryse09301pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F570535%2Fb477bryse09301%2F&af_id=peeyew-990&ch=api",
+    "genres": [
+      "ニュース",
+      "エンターテイメント"
+    ],
+    "status": "pending",
+    "created": "2026-09-27T15:28:52.167Z"
   }
 ]
