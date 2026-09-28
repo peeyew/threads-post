@@ -111,6 +111,12 @@ const animeExcludeWords = DMM_TV_MODE && existsSync('./config/dmmtv-anime-exclud
 const allExcludeWords = [...ngWords, ...animeExcludeWords];
 const hasNgWord = title => allExcludeWords.some(word => title.includes(word));
 
+// DVD/Blu-ray品番風の短いcontentId（例: 5125lcdv41438）は、DMM TVネイティブ配信のアニメではなく
+// 実写グラビア/イメージビデオ・2.5次元舞台等のクロス出品である可能性が高いため除外する。
+// （2026-09-28: 実写グラビアDVDがkeyword=アニメ検索の誤検出でdmmtv投稿に混入した事故の対策。
+// 　ネイティブ配信アニメのcontentIdは長いランダム英数字のハッシュ状で、この形式には一致しない）
+const NON_ANIME_ID_PATTERN = /^\d{3,5}[a-z]+\d+$/i;
+
 async function fetchPage(offset) {
   const keywordParam = KEYWORD ? `&keyword=${encodeURIComponent(KEYWORD)}` : '';
   const url = `https://api.dmm.com/affiliate/v3/ItemList?api_id=${API_ID}&affiliate_id=${AFFILIATE_ID}&site=${SITE}&service=${SERVICE}&floor=${FLOOR}&hits=${PAGE_SIZE}&offset=${offset}&sort=${SORT}${keywordParam}&output=json`;
@@ -134,6 +140,7 @@ console.log(`DMM.com一般(${SERVICE}/${FLOOR})sort=${SORT}${KEYWORD ? `&keyword
 
 const newPosts = [];
 let skippedNg = 0;
+let skippedNonAnimeId = 0;
 let skippedDuplicate = 0;
 let skippedNoImage = 0;
 let offset = 1;
@@ -156,6 +163,12 @@ try {
 
       if (excludedIds.has(item.contentId)) {
         skippedDuplicate++;
+        continue;
+      }
+
+      if (NON_ANIME_ID_PATTERN.test(item.contentId)) {
+        skippedNonAnimeId++;
+        console.log(`品番風contentIdのためスキップ: ${item.contentId} (${item.title.slice(0, 40)}...)`);
         continue;
       }
 
@@ -182,6 +195,7 @@ try {
         contentId: item.contentId,
         source: SLOT,
         ...(DMM_TV_MODE ? { variant: DMM_TV_MODE } : {}),
+        title: item.title, // 記録目的のみ。投稿本文には使わない
         body,
         imageUrl: item.imageUrl || '',
         url: item.url,
@@ -199,7 +213,7 @@ try {
   process.exit(1);
 }
 
-console.log(`新規${newPosts.length}件（重複${skippedDuplicate}件・NGワード${skippedNg}件・画像なし${skippedNoImage}件をスキップ）`);
+console.log(`新規${newPosts.length}件（重複${skippedDuplicate}件・NGワード${skippedNg}件・品番風ID${skippedNonAnimeId}件・画像なし${skippedNoImage}件をスキップ）`);
 
 // posts.jsonに追記（posted-ids.jsonへの書き込みはここでは行わない。post-threads.js参照）
 const merged = [...existingPosts, ...newPosts];
