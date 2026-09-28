@@ -445,8 +445,9 @@
       "ニュース",
       "エンターテイメント"
     ],
-    "status": "pending",
-    "created": "2026-09-27T15:28:52.167Z"
+    "status": "posted",
+    "created": "2026-09-27T15:28:52.167Z",
+    "postedAt": "2026-09-28T01:16:55.659Z"
   },
   {
     "contentId": "5125lcdv41438",
@@ -458,5 +459,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-28T00:21:07.540Z"
+  },
+  {
+    "contentId": "t3pqtb165tvm9fai6b5x3hgb",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "舞台のライブ感そのまま映像に残ってるの、正直贅沢すぎる。550円でダンスバトルの熱気を追体験できる",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dt3pqtb165tvm9fai6b5x3hgb%26season%3Dt3pqtb165tvm9fai6b5x3hgb&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-28T01:16:44.068Z"
   }
 ]
