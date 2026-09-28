@@ -19,6 +19,13 @@ const USER_ID = process.env.THREADS_USER_ID;
 const ACCESS_TOKEN = process.env.THREADS_ACCESS_TOKEN;
 const GRAPH_BASE = 'https://graph.threads.net/v1.0';
 
+// DMM APIへのリクエストはAPI用のaffiliate_id(990番台)で行うが、投稿本文に載せるURLは
+// Threads用サイトのaf_id(peeyew-002)に置換する。未設定時はAPI用IDのまま投稿する
+const DISPLAY_AFFILIATE_ID = process.env.DMM_AFFILIATE_ID_THREADS_DISPLAY;
+
+// 種別を限定して投稿したい場合に'dmmtv'|'ebook'を指定する。未設定なら種別を問わず先頭を選ぶ
+const POST_SOURCE = process.env.POST_SOURCE;
+
 const postsFile = './posts.json';
 const POSTED_IDS_FILE = './posted-ids.json';
 const POSTED_ID_TTL_MS = 90 * 24 * 60 * 60 * 1000; // 90日
@@ -37,10 +44,10 @@ if (!existsSync(postsFile)) {
 }
 
 const posts = JSON.parse(readFileSync(postsFile, 'utf-8'));
-const next = posts.find(p => p.status === 'pending');
+const next = posts.find(p => p.status === 'pending' && (!POST_SOURCE || p.source === POST_SOURCE));
 
 if (!next) {
-  console.log('投稿待ちの記事がありません');
+  console.log(POST_SOURCE ? `対象種別(${POST_SOURCE})の投稿待ちの記事がありません` : '投稿待ちの記事がありません');
   process.exit(0);
 }
 
@@ -53,6 +60,26 @@ function buildMainText(bodyText, url) {
   const suffix = url ? `${PR_TAG_BLOCK}\n${url}` : PR_TAG_BLOCK;
   const maxBodyLen = Math.max(0, THREADS_TEXT_LIMIT - suffix.length);
   return `${trimBody(bodyText, maxBodyLen)}${suffix}`;
+}
+
+// DMM APIから取得したURLのaf_idパラメータのみをThreads用サイトIDに置換する。
+// lurl・ch等の他パラメータやパラメータ順序はそのまま保持する
+function toDisplayUrl(rawUrl) {
+  if (!rawUrl) return rawUrl;
+  if (!DISPLAY_AFFILIATE_ID) {
+    console.warn('DMM_AFFILIATE_ID_THREADS_DISPLAY未設定のため、URLのaf_idをAPI用IDのまま投稿します');
+    return rawUrl;
+  }
+  try {
+    const u = new URL(rawUrl);
+    if (u.searchParams.has('af_id')) {
+      u.searchParams.set('af_id', DISPLAY_AFFILIATE_ID);
+    }
+    return u.toString();
+  } catch (err) {
+    console.warn(`URL解析失敗のためaf_id置換をスキップ: ${err.message}`);
+    return rawUrl;
+  }
 }
 
 // コンテナ作成（image_urlがあればIMAGE、なければTEXT）
@@ -98,7 +125,7 @@ function recordPostedId(contentId) {
   console.log(`posted-ids.jsonを更新しました（有効${valid.length}件）`);
 }
 
-const mainText = buildMainText(next.body || next.text || '', next.url || '');
+const mainText = buildMainText(next.body || next.text || '', toDisplayUrl(next.url) || '');
 
 if (DRY_RUN) {
   console.log('[DRY_RUN] 本体投稿:');
