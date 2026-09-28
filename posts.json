@@ -431,8 +431,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5q7dd4s2riw201h7vojbwqtsg%26season%3D81tvwwqdzb52ov637tu0m8s4j&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-27T07:49:44.029Z"
+    "status": "posted",
+    "created": "2026-09-27T07:49:44.029Z",
+    "postedAt": "2026-09-28T00:21:16.674Z"
   },
   {
     "contentId": "b477bryse09301",
@@ -446,5 +447,16 @@
     ],
     "status": "pending",
     "created": "2026-09-27T15:28:52.167Z"
+  },
+  {
+    "contentId": "5125lcdv41438",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "伊織いおというタイトルそのままの潔さ、逆に見る側の腹が決まる。2530円で真正面から向き合う時間",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5125lcdv41438%26season%3D5125lcdv41438&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-28T00:21:07.540Z"
   }
 ]
