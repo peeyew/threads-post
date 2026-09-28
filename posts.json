@@ -457,8 +457,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5125lcdv41438%26season%3D5125lcdv41438&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-28T00:21:07.540Z"
+    "status": "posted",
+    "created": "2026-09-28T00:21:07.540Z",
+    "postedAt": "2026-09-28T01:33:43.175Z"
   },
   {
     "contentId": "t3pqtb165tvm9fai6b5x3hgb",
@@ -470,5 +471,16 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-28T01:16:44.068Z"
+  },
+  {
+    "contentId": "5162stage260702",
+    "source": "dmmtv",
+    "variant": "latest",
+    "body": "舞台のレゼが銃を構える瞬間、原作の余白がそのまま緊張感に変わってた。生身の芝居でここまで来るとは",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5162stage260702%26season%3D5162stage260702&af_id=peeyew-990&ch=api",
+    "genres": [],
+    "status": "pending",
+    "created": "2026-09-28T01:33:32.639Z"
   }
 ]
