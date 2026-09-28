@@ -496,5 +496,21 @@
     "genres": [],
     "status": "pending",
     "created": "2026-09-28T02:38:49.861Z"
+  },
+  {
+    "contentId": "b950gshes00114",
+    "source": "ebook",
+    "title": "ヒカルの碁",
+    "body": "碁盤の前で息を止める瞬間、あの緊張感を何度でも味わいたくなる。484円でサイと進の物語をまた追える",
+    "imageUrl": "https://ebook-assets.dmm.com/digital/e-book/b950gshes00114/b950gshes00114pl.jpg",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Fbook.dmm.com%2Fproduct%2F56954%2Fb950gshes00114%2F&af_id=peeyew-990&ch=api",
+    "genres": [
+      "スポーツ",
+      "アニメ化",
+      "完結"
+    ],
+    "status": "posted",
+    "created": "2026-09-28T18:19:54.993Z",
+    "postedAt": "2026-09-28T18:20:06.442Z"
   }
 ]
