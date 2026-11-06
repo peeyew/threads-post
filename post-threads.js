@@ -82,14 +82,44 @@ function toDisplayUrl(rawUrl) {
   }
 }
 
+// トピック(topic_tag)。Threads APIでは1投稿につき1つ、1〜50文字、ピリオドとアンパサンドは使えない。
+// 種別ごとの割り当てはconfig/topic-map.jsonで管理する（ebookはgenresの先頭から順にルール照合）。
+const TOPIC_MAP_FILE = './config/topic-map.json';
+
+function sanitizeTopic(topic) {
+  if (!topic || typeof topic !== 'string') return undefined;
+  const cleaned = topic.replace(/[.&]/g, '').trim().slice(0, 50);
+  return cleaned || undefined;
+}
+
+function pickTopicTag(post) {
+  if (!existsSync(TOPIC_MAP_FILE)) return undefined;
+  let map;
+  try {
+    map = JSON.parse(readFileSync(TOPIC_MAP_FILE, 'utf-8'));
+  } catch (err) {
+    console.warn(`topic-map.jsonの解析に失敗したためトピックなしで投稿します: ${err.message}`);
+    return undefined;
+  }
+  const entry = map[post.source];
+  if (typeof entry === 'string') return sanitizeTopic(entry);
+  if (!entry) return undefined;
+  const genres = post.genres || [];
+  for (const rule of entry.rules || []) {
+    if (rule.genres?.some(g => genres.includes(g))) return sanitizeTopic(rule.topic);
+  }
+  return sanitizeTopic(entry.default);
+}
+
 // コンテナ作成（image_urlがあればIMAGE、なければTEXT）
-async function createContainer({ text, imageUrl }) {
+async function createContainer({ text, imageUrl, topicTag }) {
   const payload = {
     media_type: imageUrl ? 'IMAGE' : 'TEXT',
     text,
     access_token: ACCESS_TOKEN,
   };
   if (imageUrl) payload.image_url = imageUrl;
+  if (topicTag) payload.topic_tag = topicTag;
 
   const res = await fetch(`${GRAPH_BASE}/${USER_ID}/threads`, {
     method: 'POST',
@@ -126,11 +156,13 @@ function recordPostedId(contentId) {
 }
 
 const mainText = buildMainText(next.body || next.text || '', toDisplayUrl(next.url) || '');
+const topicTag = pickTopicTag(next);
 
 if (DRY_RUN) {
   console.log('[DRY_RUN] 本体投稿:');
   console.log(mainText);
   console.log(`[DRY_RUN] media_type: ${next.imageUrl ? 'IMAGE' : 'TEXT'}`);
+  console.log(`[DRY_RUN] topic_tag: ${topicTag || '(なし)'}`);
   if (next.imageUrl) console.log(`[DRY_RUN] 画像URL: ${next.imageUrl}`);
   console.log(`[DRY_RUN] source: ${next.source}${next.variant ? ` (variant: ${next.variant})` : ''}`);
   console.log(`[DRY_RUN] genres: ${(next.genres || []).join(', ') || '(なし)'}`);
@@ -142,7 +174,7 @@ let mainPublishedId;
 
 // ── 本体投稿（失敗したらここでexit(1)。next.statusは未更新のまま = 次回リトライ対象） ──
 try {
-  const mainCreationId = await createContainer({ text: mainText, imageUrl: next.imageUrl || undefined });
+  const mainCreationId = await createContainer({ text: mainText, imageUrl: next.imageUrl || undefined, topicTag });
   console.log(`本体投稿:\n${mainText}\n`);
 
   // 公開前の待機（Threads APIの一般的な推奨パターン。画像取得・処理の完了を待つ）
