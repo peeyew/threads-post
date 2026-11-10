@@ -1325,5 +1325,20 @@
     ],
     "status": "pending",
     "created": "2026-11-10T05:07:35.767Z"
+  },
+  {
+    "contentId": "mxzmw071qzpz0g1btt66fi8en",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "オードリーさん、ぜひ会ってほしい人がいるんです。",
+    "body": "「会ってほしい人」って誰だよ、と突っ込みたくなるタイトル。会った先に何があるのか気になる。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dobrett7iir13bf5qcfagigua3%26season%3Dmxzmw071qzpz0g1btt66fi8en&af_id=peeyew-990&ch=api",
+    "category": "バラエティ",
+    "genres": [
+      "バラエティ"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:07:58.590Z"
   }
 ]
