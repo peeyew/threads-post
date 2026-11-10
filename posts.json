@@ -1310,5 +1310,20 @@
     ],
     "status": "pending",
     "created": "2026-11-10T05:07:12.120Z"
+  },
+  {
+    "contentId": "1qdk5nft4qwmu9nxs8hw29v9k",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "mono",
+    "body": "短いタイトルほど内容が読めなくて逆に気になる。monoって何を指してるんだろう。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dej1xtvupvpuktqcvxk0zaoqtu%26season%3D1qdk5nft4qwmu9nxs8hw29v9k&af_id=peeyew-990&ch=api",
+    "category": "映画",
+    "genres": [
+      "映画"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:07:35.767Z"
   }
 ]
