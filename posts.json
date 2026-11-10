@@ -494,8 +494,9 @@
     "imageUrl": "",
     "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dt3pqtb165tvm9fai6b5x3hgb%26season%3Dt3pqtb165tvm9fai6b5x3hgb&af_id=peeyew-990&ch=api",
     "genres": [],
-    "status": "pending",
-    "created": "2026-09-28T02:38:49.861Z"
+    "status": "skipped",
+    "created": "2026-09-28T02:38:49.861Z",
+    "skipReason": "non-anime-suspected"
   },
   {
     "contentId": "b950gshes00114",
