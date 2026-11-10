@@ -1245,5 +1245,20 @@
     ],
     "status": "pending",
     "created": "2026-11-10T05:02:42.434Z"
+  },
+  {
+    "contentId": "2k7xkt6igev8yqbfqn9m7hrfi",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "横道ドラゴン",
+    "body": "タイトルだけで何するのか全然わからないのに、気づいたら再生ボタン押してた。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D99bffsh1ffqfe6qzq0ox879q6%26season%3D2k7xkt6igev8yqbfqn9m7hrfi&af_id=peeyew-990&ch=api",
+    "category": "バラエティ",
+    "genres": [
+      "バラエティ"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:03:05.586Z"
   }
 ]
