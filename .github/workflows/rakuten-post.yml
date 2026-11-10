@@ -1,0 +1,80 @@
+name: 楽天 Threads自動投稿
+
+# 最初はworkflow_dispatch（DRY_RUN既定）のみ。DRY_RUNで問題なければ下のscheduleを有効化する。
+# 1日1回(12:30 JST)から始め、慣れたら1日3回(9:00 / 15:00 / 22:00 JST)に増やす場合は、
+# 該当行のコメントを外す（UTC表記。JST-9時間）。
+on:
+  # schedule:
+  #   - cron: '30 3 * * *'   # 12:30 JST  ← 初期運用（1日1回）
+  #   # 1日3回運用に切り替える場合は上の行を消して、以下3行を有効化する
+  #   - cron: '0 0 * * *'    # 09:00 JST
+  #   - cron: '0 6 * * *'    # 15:00 JST
+  #   - cron: '0 13 * * *'   # 22:00 JST
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'DRY_RUN (1ならThreadsへの実際の投稿をスキップしログのみ出力)'
+        required: false
+        default: '1'
+
+permissions:
+  contents: write
+
+# posts.json/posted-ids.jsonを更新してpushするため、同じ楽天workflow同士の同時実行を防ぐ
+concurrency:
+  group: rakuten-post
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      # TODO: fetch-rakuten.jsは楽天の現行API仕様（エンドポイント/accessKey/Referer）と
+      # 画像利用規約の確認後に追加する。追加したらこのステップを有効化する。
+      # - name: 楽天商品を1件取得
+      #   run: node fetch-rakuten.js
+      #   env:
+      #     RAKUTEN_APPLICATION_ID: ${{ secrets.RAKUTEN_APPLICATION_ID }}
+      #     RAKUTEN_ACCESS_KEY: ${{ secrets.RAKUTEN_ACCESS_KEY }}
+      #     RAKUTEN_AFFILIATE_ID: ${{ secrets.RAKUTEN_AFFILIATE_ID }}
+      #     ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - name: Threads投稿
+        run: node post-threads.js
+        env:
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          GAS_ENDPOINT: ${{ secrets.GAS_ENDPOINT }}
+          POST_SOURCE: rakuten
+          # schedule実行時はinputsが空になるため、未指定ならDRY_RUN=1に倒す（誤投稿防止）。
+          # 本番投稿を始める時は、このデフォルトを'0'に変更する
+          DRY_RUN: ${{ inputs.dry_run || '1' }}
+      - name: posts.json/posted-ids.jsonの変更をコミット
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add posts.json posted-ids.json
+          if git diff --cached --quiet; then
+            echo "変更なし"
+          else
+            git commit -m "chore: update posts.json/posted-ids.json [skip ci]"
+            success=0
+            for i in 1 2 3; do
+              if git push; then
+                echo "push成功(試行${i}回目)"
+                success=1
+                break
+              fi
+              echo "push失敗(試行${i}回目)。git pull --rebaseしてリトライします"
+              git pull --rebase
+            done
+            if [ "$success" != "1" ]; then
+              echo "3回リトライしてもpushに失敗しました"
+              exit 1
+            fi
+          fi

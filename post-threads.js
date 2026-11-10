@@ -1,9 +1,12 @@
 // posts.jsonから次の未投稿(pending)を取り出してThreadsに投稿する。
 // x-auto-post/auto-post.js（X向け）をThreads API向けに移植したもの。
 //
-// アフィリエイトURLは本文テキストに含めて1回のAPI呼び出しで投稿する
-// （以前はリンクを別のリプライ投稿にしていたが、本文内リンク方式に変更した）。
-// imageUrlがある投稿（DMMブックス）はIMAGE、ない投稿（DMM TV）はTEXTとして投稿する。
+// アフィリエイトURLは原則として本文テキストに含めて1回のAPI呼び出しで投稿する
+// （DMM。以前はリンクを別のリプライ投稿にしていたが、本文内リンク方式に変更した）。
+// ただしLINK_IN_REPLY_SOURCES（楽天）は「本文（リンクなし）→ 自分の投稿へのリプライでリンク」の
+// 2段階で投稿する。リプライは本体確定後の非致命的な処理で、失敗しても本体は重複投稿しない。
+// Threads APIのreply_to_idには「公開後のID」（threads_publishのレスポンスID）を渡す。
+// imageUrlがある投稿（DMMブックス）はIMAGE、ない投稿（DMM TV、楽天の画像なし運用）はTEXTとして投稿する。
 //
 // posted-ids.jsonへの書き込みはここで行う（fetch-dmm.js側では行わない）。
 // 投稿が実際に成功した場合にのみcontentIdを記録することで、投稿失敗時にpendingのまま
@@ -23,8 +26,11 @@ const GRAPH_BASE = 'https://graph.threads.net/v1.0';
 // Threads用サイトのaf_id(peeyew-002)に置換する。未設定時はAPI用IDのまま投稿する
 const DISPLAY_AFFILIATE_ID = process.env.DMM_AFFILIATE_ID_THREADS_DISPLAY;
 
-// 種別を限定して投稿したい場合に'dmmtv'|'ebook'を指定する。未設定なら種別を問わず先頭を選ぶ
+// 種別を限定して投稿したい場合に'dmmtv'|'ebook'|'rakuten'を指定する。未設定なら種別を問わず先頭を選ぶ
 const POST_SOURCE = process.env.POST_SOURCE;
+
+// リンクを本文ではなくリプライに付ける種別
+const LINK_IN_REPLY_SOURCES = new Set(['rakuten']);
 
 const postsFile = './posts.json';
 const POSTED_IDS_FILE = './posted-ids.json';
@@ -111,8 +117,8 @@ function pickTopicTag(post) {
   return sanitizeTopic(entry.default);
 }
 
-// コンテナ作成（image_urlがあればIMAGE、なければTEXT）
-async function createContainer({ text, imageUrl, topicTag }) {
+// コンテナ作成（image_urlがあればIMAGE、なければTEXT。replyToIdがあれば返信になる）
+async function createContainer({ text, imageUrl, topicTag, replyToId }) {
   const payload = {
     media_type: imageUrl ? 'IMAGE' : 'TEXT',
     text,
@@ -120,6 +126,7 @@ async function createContainer({ text, imageUrl, topicTag }) {
   };
   if (imageUrl) payload.image_url = imageUrl;
   if (topicTag) payload.topic_tag = topicTag;
+  if (replyToId) payload.reply_to_id = replyToId;
 
   const res = await fetch(`${GRAPH_BASE}/${USER_ID}/threads`, {
     method: 'POST',
@@ -155,7 +162,12 @@ function recordPostedId(contentId) {
   console.log(`posted-ids.jsonを更新しました（有効${valid.length}件）`);
 }
 
-const mainText = buildMainText(next.body || next.text || '', toDisplayUrl(next.url) || '');
+const linkInReply = LINK_IN_REPLY_SOURCES.has(next.source);
+// DMMのaf_id置換はDMM用の処理のため、リプライ運用の種別（楽天）のURLには適用しない
+const mainText = linkInReply
+  ? buildMainText(next.body || next.text || '', '')
+  : buildMainText(next.body || next.text || '', toDisplayUrl(next.url) || '');
+const replyText = linkInReply ? (next.url || '') : '';
 const topicTag = pickTopicTag(next);
 
 if (DRY_RUN) {
@@ -164,6 +176,11 @@ if (DRY_RUN) {
   console.log(`[DRY_RUN] media_type: ${next.imageUrl ? 'IMAGE' : 'TEXT'}`);
   console.log(`[DRY_RUN] topic_tag: ${topicTag || '(なし)'}`);
   if (next.imageUrl) console.log(`[DRY_RUN] 画像URL: ${next.imageUrl}`);
+  if (replyText) {
+    console.log('[DRY_RUN] リプライ(リンク):');
+    console.log(replyText);
+  }
+  console.log(`[DRY_RUN] 本文文字数: ${mainText.length}/${THREADS_TEXT_LIMIT}`);
   console.log(`[DRY_RUN] source: ${next.source}${next.variant ? ` (variant: ${next.variant})` : ''}`);
   console.log(`[DRY_RUN] genres: ${(next.genres || []).join(', ') || '(なし)'}`);
   console.log('[DRY_RUN] 実際の投稿・posts.json/posted-ids.json更新・GAS送信は行いません');
@@ -216,4 +233,19 @@ if (!isValidThreadsId(mainPublishedId)) {
     postedAt: next.postedAt,
     ...insights,
   });
+}
+
+// ── リプライ投稿（リンク）。本体確定後の非致命的な処理のため、失敗してもexit(1)しない ──
+if (replyText) {
+  try {
+    const replyCreationId = await createContainer({ text: replyText, replyToId: mainPublishedId });
+    console.log(`リプライ:\n${replyText}\n`);
+    await new Promise(r => setTimeout(r, 3000));
+    const replyPublishedId = await publishContainer(replyCreationId);
+    console.log('リプライ投稿完了！');
+    console.log(`公開ID: ${replyPublishedId}`);
+  } catch (err) {
+    // 本体は公開・記録済みのためリプライ失敗は警告に留める。リンクなしの投稿が残るが自動リトライはしない
+    console.error('リプライ投稿失敗（本体投稿は成功済み）:', err.message);
+  }
 }

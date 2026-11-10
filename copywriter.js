@@ -13,6 +13,7 @@ const MODEL = 'claude-sonnet-5';
 const MEDIA_LABEL = {
   dmmtv: 'DMM TV',
   ebook: 'DMMブックス',
+  rakuten: '楽天市場',
 };
 
 // 過去投稿との重複回避のため、プロンプトに含める直近投稿の件数
@@ -27,20 +28,40 @@ const STYLE_AVOID_LIST = [
   '一人称・語尾を投稿ごとに機械的に統一しない（例: 毎回「〜だ。」で終わる、を避ける）',
 ];
 
-function buildSystemPrompt(ngWords) {
-  return `あなたはThreadsのアフィリエイト投稿の本文だけを書くコピーライターです。
-対象はDMM.com一般（FANZAではない）のDMM TV(配信作品)またはDMMブックス(コミック・写真集・小説等)。
+// 媒体ごとの対象説明・文字数の指示。DMMは画像とタイトルが別表示される前提の短い一言、
+// 楽天は画像なしのテキスト投稿もあり得るため、商品が何かが本文だけで伝わる紹介文にする
+const SOURCE_PROMPT = {
+  dmm: {
+    intro: `対象はDMM.com一般（FANZAではない）のDMM TV(配信作品)またはDMMブックス(コミック・写真集・小説等)。
 画像とタイトルは投稿に別途表示されるため、本文では画像・タイトルとそのまま重複しない一言
-（気になるポイント・感想めいた一言・軽い煽りなど）を添えます。
+（気になるポイント・感想めいた一言・軽い煽りなど）を添えます。`,
+    length: `日本語で、40〜90文字程度（長くても100文字を超えない。Threadsは500文字まで書けるが、
+  テンポの良い一言コメントを保つためあえて短くまとめる）`,
+    extra: '',
+  },
+  rakuten: {
+    intro: `対象は楽天市場の商品（日用品・ペット用品・本など、季節を問わず使えるもの）。
+投稿は画像なしのテキストのみの場合があるため、本文だけで「どんな商品で、どんな場面で便利そうか」が
+伝わるようにします（商品名は長ければ要点だけに短縮してよい）。リンクは別のリプライに付きます。`,
+    length: `日本語で、60〜140文字程度（長くても160文字を超えない）`,
+    extra: `- 渡された商品情報（商品名・価格・ジャンル）に書かれていない仕様・効果・効能・数値・受賞歴を創作しない
+- 「最安」「No.1」「絶対」「必ず効く」等の断定・最上級表現や、医薬的な効能の示唆をしない
+- 価格は変動し得るため、価格を書く場合は「◯◯円前後」程度にとどめる（書かなくてもよい）`,
+  },
+};
+
+function buildSystemPrompt(ngWords, source) {
+  const cfg = source === 'rakuten' ? SOURCE_PROMPT.rakuten : SOURCE_PROMPT.dmm;
+  return `あなたはThreadsのアフィリエイト投稿の本文だけを書くコピーライターです。
+${cfg.intro}
 
 ## 絶対条件
-- 日本語で、40〜90文字程度（長くても100文字を超えない。Threadsは500文字まで書けるが、
-  テンポの良い一言コメントを保つためあえて短くまとめる）
+- ${cfg.length}
 - 出力は投稿本文のみ。前置き・説明・見出し・引用符・ハッシュタグを付けない
 - URLは含めない（リンクは投稿システム側で本文末尾に機械的に付与するため）
 - 広告表記【PR】は付けない（投稿システム側で機械的に付与するため）
 - 次のNGワードや、それを想起させる表現は絶対に使わない: ${ngWords.join('、')}
-- 際どい表現で規約に触れそうな場合は無難な表現に倒す
+- 際どい表現で規約に触れそうな場合は無難な表現に倒す${cfg.extra ? `\n${cfg.extra}` : ''}
 
 ## 人間らしさ（最重要）
 実際に商品ページを見た人が思わず一言つぶやいたような、ラフで揺れのある短文にする。
@@ -57,21 +78,22 @@ ${STYLE_AVOID_LIST.map(s => `- ${s}`).join('\n')}
 特定の助詞・語尾・相槌に頼らず、毎回違う言葉選びをすること。`;
 }
 
-function buildUserPrompt({ mediaLabel, title, genres, price }, recentBodies) {
+function buildUserPrompt({ source, mediaLabel, title, genres, price }, recentBodies) {
+  const noun = source === 'rakuten' ? '商品' : '作品';
   const genreText = genres && genres.length ? genres.slice(0, 5).join('/') : 'なし';
   const recentText = recentBodies.length
     ? recentBodies.map((b, i) => `${i + 1}. ${b}`).join('\n')
     : '(まだ投稿履歴なし)';
 
   return `媒体: ${mediaLabel}
-作品タイトル: ${title}
+${noun}名: ${title}
 ジャンル: ${genreText}
 価格情報: ${price ?? '不明'}
 
 直近の投稿本文（この言い回し・型を繰り返さないこと）:
 ${recentText}
 
-上記を踏まえて、この作品を紹介する投稿本文を1つだけ書いてください。`;
+上記を踏まえて、この${noun}を紹介する投稿本文を1つだけ書いてください。`;
 }
 
 function loadNgWords() {
@@ -109,13 +131,13 @@ function findReusedTic(text, recentBodies) {
   return TIC_WATCHLIST.find(tic => text.includes(tic) && recentWindow.includes(tic));
 }
 
-// product: { source, title, genres, price } ※sourceは'dmmtv'または'ebook'
+// product: { source, title, genres, price } ※sourceは'dmmtv'|'ebook'|'rakuten'
 // recentBodies: 直近投稿本文の配列（新しい順）。重複回避のプロンプトに使う
 export async function generateBody(product, recentBodies) {
   const client = new Anthropic();
   const mediaLabel = MEDIA_LABEL[product.source] || product.source;
   const ngWords = loadNgWords();
-  const system = buildSystemPrompt(ngWords);
+  const system = buildSystemPrompt(ngWords, product.source);
   const messages = [
     { role: 'user', content: buildUserPrompt({ ...product, mediaLabel }, recentBodies) },
   ];
