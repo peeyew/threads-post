@@ -1275,5 +1275,20 @@
     ],
     "status": "pending",
     "created": "2026-11-10T05:03:30.792Z"
+  },
+  {
+    "contentId": "ak8ci1priernmk25a07vxso94",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "映画「羅小黒戦記2 ぼくらが望む未来」",
+    "body": "続編まで作画の密度が落ちてないの、地味じゃなくてちゃんとすごい。黒猫の表情だけで泣けてくる瞬間がある。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dak8ci1priernmk25a07vxso94%26season%3Dak8ci1priernmk25a07vxso94&af_id=peeyew-990&ch=api",
+    "category": "映画",
+    "genres": [
+      "映画"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:03:55.387Z"
   }
 ]
