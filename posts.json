@@ -1295,5 +1295,20 @@
     "status": "skipped",
     "created": "2026-11-10T05:03:55.387Z",
     "skipReason": "dry-run-review"
+  },
+  {
+    "contentId": "jr0kten7es6iyy71vj51dptsu",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "ホテル・インヒューマンズ",
+    "body": "人間という設定からして不穏すぎる。ホテルの中で何が起きてるのか気になる。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dqirvrk0fb8i3z9jtowknpvjid%26season%3Djr0kten7es6iyy71vj51dptsu&af_id=peeyew-990&ch=api",
+    "category": "ドラマ",
+    "genres": [
+      "ドラマ"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:07:12.120Z"
   }
 ]
