@@ -1308,8 +1308,9 @@
     "genres": [
       "ドラマ"
     ],
-    "status": "pending",
-    "created": "2026-11-10T05:07:12.120Z"
+    "status": "skipped",
+    "created": "2026-11-10T05:07:12.120Z",
+    "skipReason": "dry-run-review"
   },
   {
     "contentId": "1qdk5nft4qwmu9nxs8hw29v9k",
@@ -1323,8 +1324,9 @@
     "genres": [
       "映画"
     ],
-    "status": "pending",
-    "created": "2026-11-10T05:07:35.767Z"
+    "status": "skipped",
+    "created": "2026-11-10T05:07:35.767Z",
+    "skipReason": "dry-run-review"
   },
   {
     "contentId": "mxzmw071qzpz0g1btt66fi8en",
@@ -1338,7 +1340,8 @@
     "genres": [
       "バラエティ"
     ],
-    "status": "pending",
-    "created": "2026-11-10T05:07:58.590Z"
+    "status": "skipped",
+    "created": "2026-11-10T05:07:58.590Z",
+    "skipReason": "dry-run-review"
   }
 ]

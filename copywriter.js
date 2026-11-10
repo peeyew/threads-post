@@ -146,6 +146,7 @@ const TIC_WATCHLIST = ['妙', 'んだよな', 'なんか', '地味に'];
 // 他ジャンル枠で実際に繰り返された締めの型。直近の本文と同じ型が出たら言い換えさせる
 const STRICT_TIC_WATCHLIST = [
   '安い', '安すぎ', 'ずるい', '得かも', 'は得', '損ない', '一気見', '見ておく価値', '見ておきたい', '破格',
+  '気になる', 'のか気になる',
 ];
 
 function findReusedTic(text, recentBodies, watchlist = TIC_WATCHLIST) {
