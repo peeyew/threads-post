@@ -1343,5 +1343,22 @@
     "status": "skipped",
     "created": "2026-11-10T05:07:58.590Z",
     "skipReason": "dry-run-review"
+  },
+  {
+    "contentId": "1abfu5t5k79nsn099egaj9wo0",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "あの夜、社長の子供を授かりました",
+    "body": "社長の子供を授かるって、その後の人生どうなるんだ。タイトルだけで胃が痛くなる展開を想像してしまう。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D88abx3fqnp4ni36zjyr570d1t%26season%3D1abfu5t5k79nsn099egaj9wo0&af_id=peeyew-990&ch=api",
+    "category": "ドラマ",
+    "reviewAverage": 4,
+    "reviewCount": 1,
+    "genres": [
+      "ドラマ"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:14:41.995Z"
   }
 ]
