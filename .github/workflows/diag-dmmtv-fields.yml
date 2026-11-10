@@ -1,0 +1,43 @@
+name: '[診断用/一時] DMM TV ItemListの返却項目確認'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: 返却項目の和集合を確認(URL/ID類の値は出さない)
+        env:
+          DMM_API_ID: ${{ secrets.DMM_API_ID }}
+          DMM_AFFILIATE_ID: ${{ secrets.DMM_AFFILIATE_ID_THREADS }}
+        run: |
+          cat > probe.mjs <<'JS'
+          const base = `https://api.dmm.com/affiliate/v3/ItemList?api_id=${process.env.DMM_API_ID}&affiliate_id=${process.env.DMM_AFFILIATE_ID}&site=DMM.com&service=dmmtv&floor=dmmtv_video&output=json`;
+          async function list(extra) {
+            const res = await fetch(`${base}&${extra}`);
+            const r = (await res.json()).result;
+            if (!r || Number(r.status) !== 200) { console.log(`  失敗: ${extra} ${r?.result_message || res.status}`); return []; }
+            return r.items || [];
+          }
+          const queries = [];
+          for (const kw of ['ドラマ', '映画', 'バラエティ', 'アニメ']) for (const sort of ['rank', 'review', 'date']) queries.push(`keyword=${encodeURIComponent(kw)}&sort=${sort}&hits=100`);
+          queries.push('sort=rank&hits=100');
+          const seen = new Map(); let total = 0;
+          const walk = (o, path) => {
+            if (o && typeof o === 'object' && !Array.isArray(o)) { for (const [k, v] of Object.entries(o)) walk(v, path ? `${path}.${k}` : k); }
+            else if (Array.isArray(o)) { seen.set(path + '[]', (seen.get(path + '[]') || 0) + 1); if (o[0] && typeof o[0] === 'object') walk(o[0], path + '[]'); }
+            else seen.set(path, (seen.get(path) || 0) + 1);
+          };
+          for (const q of queries) { const items = await list(q); total += items.length; items.forEach(it => walk(it, '')); }
+          console.log(`調査件数: ${total} (クエリ${queries.length}本)`);
+          console.log('項目 : 出現件数');
+          [...seen.entries()].sort().forEach(([k, n]) => console.log(`  ${k} : ${n}`));
+          // 項目名に紹介文・出演者・ジャンル系が無いかの確認
+          const hit = [...seen.keys()].filter(k => /comment|description|catch|summary|story|actor|actress|cast|genre|iteminfo|director|author|maker|series|label|sample/i.test(k));
+          console.log('紹介文/出演者/ジャンル系と思われる項目:', hit.length ? hit.join(', ') : '(なし)');
+          JS
+          node probe.mjs
