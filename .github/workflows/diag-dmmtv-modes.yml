@@ -1,0 +1,41 @@
+name: '[診断用/一時] DMM TV 全枠DRY_RUN確認'
+
+# posts.json/posted-ids.jsonはcommitしない(キューを汚さない)。Threadsへの投稿もしない。
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      DMM_SLOT: dmmtv
+      DMM_API_ID: ${{ secrets.DMM_API_ID }}
+      DMM_AFFILIATE_ID_THREADS: ${{ secrets.DMM_AFFILIATE_ID_THREADS }}
+      DMM_HITS: '1'
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+      THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+      DMM_AFFILIATE_ID_THREADS_DISPLAY: ${{ vars.DMM_AFFILIATE_ID_THREADS_DISPLAY }}
+      POST_SOURCE: dmmtv
+      DRY_RUN: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - name: '1 アニメ(latest)'
+        run: |
+          echo "=== latest ==="; DMM_TV_MODE=latest node fetch-dmm.js; POST_VARIANT=latest node post-threads.js
+      - name: '2 アニメ(popular・評価5件以上)'
+        run: |
+          echo "=== popular ==="; DMM_TV_MODE=popular node fetch-dmm.js; POST_VARIANT=popular node post-threads.js
+      - name: '3 他ジャンル ドラマ'
+        run: |
+          echo "=== other/ドラマ ==="; DMM_TV_MODE=other DMM_TV_KEYWORD=ドラマ node fetch-dmm.js; POST_VARIANT=other node post-threads.js
+      - name: '4 他ジャンル 映画'
+        run: |
+          echo "=== other/映画 ==="; DMM_TV_MODE=other DMM_TV_KEYWORD=映画 node fetch-dmm.js; POST_VARIANT=other node post-threads.js
+      - name: '5 他ジャンル バラエティ'
+        run: |
+          echo "=== other/バラエティ ==="; DMM_TV_MODE=other DMM_TV_KEYWORD=バラエティ node fetch-dmm.js; POST_VARIANT=other node post-threads.js
