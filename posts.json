@@ -1523,5 +1523,23 @@
     "status": "skipped",
     "created": "2026-11-10T06:03:30.429Z",
     "skipReason": "dry-run-review"
+  },
+  {
+    "contentId": "r6va8rwrj7u6xg79teb040g4q",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "ルパン三世",
+    "body": "何回見てもあの不敵な笑みだけは色褪せない、ルパンってタイトルだけで安心感あるの何なんだろう。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D537wyeig1qs1rdagipvzva8eb%26season%3Dr6va8rwrj7u6xg79teb040g4q&af_id=peeyew-990&ch=api",
+    "category": "バラエティ",
+    "reviewAverage": 3.5,
+    "reviewCount": 2,
+    "genres": [
+      "バラエティ"
+    ],
+    "status": "posted",
+    "created": "2026-11-10T18:28:04.323Z",
+    "postedAt": "2026-11-10T18:28:21.490Z"
   }
 ]
