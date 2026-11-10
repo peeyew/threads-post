@@ -1411,5 +1411,22 @@
     ],
     "status": "pending",
     "created": "2026-11-10T05:15:55.492Z"
+  },
+  {
+    "contentId": "gytgi7k0s0irbqjht54a0i9bq",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "映画 それいけ！アンパンマン リズムでうたおう！ アンパンマン夏まつり",
+    "body": "夏まつりでリズムに乗るアンパンマン、子どもより先に親が踊り出しそうなタイトルだな。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dgytgi7k0s0irbqjht54a0i9bq%26season%3Dgytgi7k0s0irbqjht54a0i9bq&af_id=peeyew-990&ch=api",
+    "category": "映画",
+    "reviewAverage": null,
+    "reviewCount": 0,
+    "genres": [
+      "映画"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:16:19.197Z"
   }
 ]
