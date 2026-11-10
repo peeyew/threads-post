@@ -1,10 +1,10 @@
 name: DMM TV Threads自動投稿(3・他ジャンル)
 
 on:
-  # 他ジャンル(ドラマ/映画/バラエティ)枠。当面はDRY_RUN確認のためworkflow_dispatchのみ。
-  # DRY_RUNを数回確認して問題なければ、下の2行のコメントを外して20:00 JSTの定期実行にする
-  # schedule:
-  #   - cron: '0 11 * * *'  # 20:00 JST = 11:00 UTC
+  # 他ジャンル(ドラマ/映画/バラエティ)枠。2026-11-10にDRY_RUNで確認のうえ定期実行を有効化。
+  # 止める時は下の2行をコメントアウトする（手動実行はdry_run=1が既定のまま）
+  schedule:
+    - cron: '0 11 * * *'  # 20:00 JST = 11:00 UTC
   workflow_dispatch:
     inputs:
       dry_run:
@@ -47,9 +47,9 @@ jobs:
           DMM_AFFILIATE_ID_THREADS_DISPLAY: ${{ vars.DMM_AFFILIATE_ID_THREADS_DISPLAY }}
           POST_SOURCE: dmmtv
           POST_VARIANT: other
-          # schedule実行時はinputsが空になるため、未指定ならDRY_RUN=1に倒す（誤投稿防止）。
-          # 本番投稿を始める時は、このデフォルトを'0'に変更する
-          DRY_RUN: ${{ inputs.dry_run || '1' }}
+          # schedule実行時はinputsが空になるため本番投稿(DRY_RUN=0)。
+          # 手動実行(workflow_dispatch)はdry_run入力の既定値'1'によりDRY_RUNになる
+          DRY_RUN: ${{ inputs.dry_run || '0' }}
       - name: posts.json/posted-ids.jsonの変更をコミット
         # post-threads.jsが失敗しても、fetch-dmm.jsが積んだpendingエントリを
         # 失わないよう必ず実行する（次回実行時のリトライ対象として残すため）。
