@@ -1165,5 +1165,20 @@
     ],
     "status": "pending",
     "created": "2026-11-10T04:57:53.333Z"
+  },
+  {
+    "contentId": "ti4wgq2vqcuv5kt0222wmcyzw",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "大脱出",
+    "body": "脱出劇なのに全員ガチで頭使ってて見てるこっちが汗かく、550円でこの緊張感は安い。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D59mj3pbco958e02h4ehrkhc86%26season%3Dti4wgq2vqcuv5kt0222wmcyzw&af_id=peeyew-990&ch=api",
+    "category": "バラエティ",
+    "genres": [
+      "バラエティ"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T04:58:17.268Z"
   }
 ]
