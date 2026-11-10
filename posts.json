@@ -1394,5 +1394,22 @@
     ],
     "status": "pending",
     "created": "2026-11-10T05:15:28.441Z"
+  },
+  {
+    "contentId": "5c58hbwbcgq82pcaiwz4zb6b7",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "おいしい給食",
+    "body": "給食にそこまで本気になれる大人、現実にいたら職員室で浮きそう。学校ドラマなのに食レポ濃い目なのが気になる。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dor54vzkzz7jdb2s2jf1g2szsf%26season%3D5c58hbwbcgq82pcaiwz4zb6b7&af_id=peeyew-990&ch=api",
+    "category": "ドラマ",
+    "reviewAverage": 4.6,
+    "reviewCount": 5,
+    "genres": [
+      "ドラマ"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:15:55.492Z"
   }
 ]
