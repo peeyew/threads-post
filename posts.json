@@ -1377,5 +1377,22 @@
     ],
     "status": "pending",
     "created": "2026-11-10T05:15:06.947Z"
+  },
+  {
+    "contentId": "ghrh36m2n43oghsqoc8h8q28r",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "月ともぐら",
+    "body": "月ともぐらってタイトルから中身を想像できない、バラエティ番組らしいけど一体何するやつなんだ。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dgfk0sob7wp4x4ajjcro5mzng0%26season%3Dghrh36m2n43oghsqoc8h8q28r&af_id=peeyew-990&ch=api",
+    "category": "バラエティ",
+    "reviewAverage": 4.5,
+    "reviewCount": 6,
+    "genres": [
+      "バラエティ"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:15:28.441Z"
   }
 ]
