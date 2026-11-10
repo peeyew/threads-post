@@ -1135,5 +1135,20 @@
     ],
     "status": "pending",
     "created": "2026-11-10T04:36:05.923Z"
+  },
+  {
+    "contentId": "73p7tn4s4585ksncip9dpowdp",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "幸せカナコの殺し屋生活",
+    "body": "主婦業と殺し屋業、どっちも本気でこなす振り切り方が面白い。550円でこのテンポ感は得かも。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dan5ximsk0rofesjwq9s17r5ze%26season%3D73p7tn4s4585ksncip9dpowdp&af_id=peeyew-990&ch=api",
+    "category": "ドラマ",
+    "genres": [
+      "ドラマ"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T04:57:29.870Z"
   }
 ]
