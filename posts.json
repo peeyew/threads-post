@@ -1260,5 +1260,20 @@
     ],
     "status": "pending",
     "created": "2026-11-10T05:03:05.586Z"
+  },
+  {
+    "contentId": "4yjagy2cur4se7sjnp3dmizv4",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "ケンシロウによろしく",
+    "body": "北斗の拳のパロディかと思ったら、想像の斜め上をいく展開で目が離せなくなった。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Du297pwpwdnztiro69wgnab6q%26season%3D4yjagy2cur4se7sjnp3dmizv4&af_id=peeyew-990&ch=api",
+    "category": "ドラマ",
+    "genres": [
+      "ドラマ"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:03:30.792Z"
   }
 ]
