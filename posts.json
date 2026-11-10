@@ -1180,5 +1180,20 @@
     ],
     "status": "pending",
     "created": "2026-11-10T04:58:17.268Z"
+  },
+  {
+    "contentId": "3nezi15na4999oxgswr4ofczr",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "サークルクラッシャーゲーム",
+    "body": "壊れていく人間関係を眺める側になる快感、550円で一気見できるのはずるい",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D3m32k7p0q7g0f28mttjco8enk%26season%3D3nezi15na4999oxgswr4ofczr&af_id=peeyew-990&ch=api",
+    "category": "映画",
+    "genres": [
+      "映画"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T04:58:39.666Z"
   }
 ]
