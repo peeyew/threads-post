@@ -11,6 +11,10 @@ on:
         description: 'DRY_RUN (1ならThreadsへの実際の投稿をスキップしログのみ出力)'
         required: false
         default: '1'
+      keyword:
+        description: '検索キーワード固定(ドラマ/映画/バラエティ。空ならランダム)'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -29,6 +33,7 @@ jobs:
         env:
           DMM_SLOT: dmmtv
           DMM_TV_MODE: other
+          DMM_TV_KEYWORD: ${{ inputs.keyword }}
           DMM_API_ID: ${{ secrets.DMM_API_ID }}
           DMM_AFFILIATE_ID_THREADS: ${{ secrets.DMM_AFFILIATE_ID_THREADS }}
           DMM_HITS: '1'
