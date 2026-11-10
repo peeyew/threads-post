@@ -138,9 +138,9 @@ const ngWords = JSON.parse(readFileSync('./config/ng-words.json', 'utf-8'));
 const animeExcludeWords = DMM_TV_MODE && existsSync('./config/dmmtv-anime-exclude-words.json')
   ? JSON.parse(readFileSync('./config/dmmtv-anime-exclude-words.json', 'utf-8'))
   : [];
-// 他ジャンル枠(DMM_TV_MODE=other)のみ、成人向けを思わせる語を含む作品名を取得対象から外す。
-// アニメ枠(latest/popular)には適用しない（適用範囲の変更は別途判断する）
-const otherExcludeWords = DMM_TV_MODE === 'other' && existsSync('./config/dmmtv-other-exclude-words.json')
+// DMM TVの全枠(latest/popular/other)で、成人向けを思わせる語を含む作品名を取得対象から外す。
+// （当初は他ジャンル枠のみだったが、2026-11-10にアニメ枠にも適用。ファイル名はother-のまま全枠共通）
+const otherExcludeWords = DMM_TV_MODE && existsSync('./config/dmmtv-other-exclude-words.json')
   ? JSON.parse(readFileSync('./config/dmmtv-other-exclude-words.json', 'utf-8'))
   : [];
 const allExcludeWords = [...ngWords, ...animeExcludeWords, ...otherExcludeWords];
