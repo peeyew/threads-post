@@ -1360,5 +1360,22 @@
     ],
     "status": "pending",
     "created": "2026-11-10T05:14:41.995Z"
+  },
+  {
+    "contentId": "7d6mtt6moj7duf90t3q9e5vfq",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "彼女、お借りします",
+    "body": "映画版まで出てるのか、この関係性どこまで引っ張るんだろう。評価3.07(60件)は賛否分かれてる証拠かも。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dk37j0nkbd78drs5nuzfm5cih%26season%3D7d6mtt6moj7duf90t3q9e5vfq&af_id=peeyew-990&ch=api",
+    "category": "映画",
+    "reviewAverage": 3.07,
+    "reviewCount": 60,
+    "genres": [
+      "映画"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:15:06.947Z"
   }
 ]
