@@ -11,7 +11,7 @@ jobs:
       DMM_SLOT: dmmtv
       DMM_API_ID: ${{ secrets.DMM_API_ID }}
       DMM_AFFILIATE_ID_THREADS: ${{ secrets.DMM_AFFILIATE_ID_THREADS }}
-      DMM_HITS: '1'
+      DMM_HITS: '5'
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
       THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
@@ -26,16 +26,16 @@ jobs:
       - run: npm install
       - name: '1 アニメ(latest)'
         run: |
-          echo "=== latest ==="; DMM_TV_MODE=latest node fetch-dmm.js; POST_VARIANT=latest node post-threads.js
+          echo "=== latest ==="; DMM_TV_MODE=latest node fetch-dmm.js; node -e "const a=JSON.parse(require('fs').readFileSync('posts.json','utf8'));const n=Number(process.env.DMM_HITS);a.slice(-n).forEach((p,i)=>console.log('  ['+(i+1)+'] '+p.category+' | '+p.title+' | id='+p.contentId.slice(0,14)+' | '+p.body))"
       - name: '2 アニメ(popular・評価5件以上)'
         run: |
-          echo "=== popular ==="; DMM_TV_MODE=popular node fetch-dmm.js; POST_VARIANT=popular node post-threads.js
+          echo "=== popular ==="; DMM_TV_MODE=popular node fetch-dmm.js; node -e "const a=JSON.parse(require('fs').readFileSync('posts.json','utf8'));const n=Number(process.env.DMM_HITS);a.slice(-n).forEach((p,i)=>console.log('  ['+(i+1)+'] '+p.category+' | '+p.title+' | id='+p.contentId.slice(0,14)+' | '+p.body))"
       - name: '3 他ジャンル ドラマ'
         run: |
-          echo "=== other/ドラマ ==="; DMM_TV_MODE=other DMM_TV_KEYWORD=ドラマ node fetch-dmm.js; POST_VARIANT=other node post-threads.js
+          echo "=== other/ドラマ ==="; DMM_TV_MODE=other DMM_TV_KEYWORD=ドラマ node fetch-dmm.js; node -e "const a=JSON.parse(require('fs').readFileSync('posts.json','utf8'));const n=Number(process.env.DMM_HITS);a.slice(-n).forEach((p,i)=>console.log('  ['+(i+1)+'] '+p.category+' | '+p.title+' | id='+p.contentId.slice(0,14)+' | '+p.body))"
       - name: '4 他ジャンル 映画'
         run: |
-          echo "=== other/映画 ==="; DMM_TV_MODE=other DMM_TV_KEYWORD=映画 node fetch-dmm.js; POST_VARIANT=other node post-threads.js
+          echo "=== other/映画 ==="; DMM_TV_MODE=other DMM_TV_KEYWORD=映画 node fetch-dmm.js; node -e "const a=JSON.parse(require('fs').readFileSync('posts.json','utf8'));const n=Number(process.env.DMM_HITS);a.slice(-n).forEach((p,i)=>console.log('  ['+(i+1)+'] '+p.category+' | '+p.title+' | id='+p.contentId.slice(0,14)+' | '+p.body))"
       - name: '5 他ジャンル バラエティ'
         run: |
-          echo "=== other/バラエティ ==="; DMM_TV_MODE=other DMM_TV_KEYWORD=バラエティ node fetch-dmm.js; POST_VARIANT=other node post-threads.js
+          echo "=== other/バラエティ ==="; DMM_TV_MODE=other DMM_TV_KEYWORD=バラエティ node fetch-dmm.js; node -e "const a=JSON.parse(require('fs').readFileSync('posts.json','utf8'));const n=Number(process.env.DMM_HITS);a.slice(-n).forEach((p,i)=>console.log('  ['+(i+1)+'] '+p.category+' | '+p.title+' | id='+p.contentId.slice(0,14)+' | '+p.body))"
