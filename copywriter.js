@@ -51,8 +51,10 @@ const SOURCE_PROMPT = {
 };
 
 // DMM TVの他ジャンル枠(mode='other')だけに追加する指示。アニメ枠(latest/popular)のプロンプトは変えない
-const STRICT_EXTRA = `- 渡された情報（作品名・ジャンル・評価が渡された場合はその評価）に無い内容を書かない。あらすじ・登場人物・出演者・制作陣・元ネタ・パロディ元・原作・受賞歴などを、推測でも断定でも書かない
+const STRICT_EXTRA = `- 渡された情報（作品名と、渡された場合はその評価）に無い内容を書かない。あらすじ・設定・舞台・登場人物・出演者・制作陣・元ネタ・パロディ元・原作・受賞歴などを、推測でも断定でも書かない
+- 作品のジャンル・形態（実写かアニメか、ドラマ・映画・バラエティのどれか、学園ものか等）を断定しない。映画化・ドラマ化・続編・シリーズ・原作にも触れない
 - 評価は「評価: 平均◯◯（◯件）」と渡された場合だけ触れてよい。触れる場合は渡された数値をそのまま使い（例:「評価4.8（1,200件）」）、他の数字を書かない。「高評価」「人気」などの言い換えも、評価が渡された場合に限って使ってよい
+- 評価の数値を解釈・論評しない。「賛否」「分かれ」「微妙」「低評価」「評価が割れ」などは書かない
 - 「評価: なし」と渡された場合は、評価・人気・口コミ・レビュー・ランキングに一切触れない（作品名とジャンルへの反応だけで書く）
 - 配信日・公開時期に触れない。「新作」「最新」「最新作」「新着」とも書かない
 - 実際に視聴した体験を装う表現を書かない。「見入ってしまった」「再生ボタン押してた」「目が離せなくなった」「泣けてくる」「観終わった」「ハマった」「思わず」「気づいたら」など、視聴済みの人の感想として語らない。作品名とジャンルから言える範囲の印象や特徴を、一般的な言い方で書く
@@ -92,10 +94,14 @@ ${STYLE_AVOID_LIST.map(s => `- ${s}`).join('\n')}
 
 // 評価を本文に使ってよい最小件数（他ジャンル枠）。これ未満・評価なしは「評価: なし」として渡す
 export const REVIEW_MIN_COUNT = 20;
-const REVIEW_HIGH_AVERAGE = 4.0; // 「高評価」「人気」等の言い換えを許す平均評価の下限
+const REVIEW_HIGH_AVERAGE = 4.0; // 評価を本文に使ってよい平均評価の下限（これ未満は評価に触れさせない）
+
+function reviewUsable(review) {
+  return !!review && Number.isFinite(review.average) && review.average >= REVIEW_HIGH_AVERAGE && review.count >= REVIEW_MIN_COUNT;
+}
 
 function formatReviewLine(review) {
-  if (!review || !Number.isFinite(review.average) || !(review.count >= REVIEW_MIN_COUNT)) return '評価: なし';
+  if (!reviewUsable(review)) return '評価: なし';
   return `評価: 平均${review.average}（${review.count.toLocaleString('en-US')}件）`;
 }
 
@@ -108,7 +114,7 @@ function buildUserPrompt({ source, mediaLabel, title, genres, price, strict = fa
 
   return `媒体: ${mediaLabel}
 ${noun}名: ${title}
-ジャンル: ${genreText}${strict ? `\n${formatReviewLine(review)}` : `\n価格情報: ${price ?? '不明'}`}
+${strict ? formatReviewLine(review) : `ジャンル: ${genreText}\n価格情報: ${price ?? '不明'}`}
 
 直近の投稿本文（この言い回し・型を繰り返さないこと）:
 ${recentText}
@@ -180,7 +186,10 @@ const FIXED_AVOID_PATTERN = /妙に|地味に/;
 const DATE_PATTERN = /新作|最新|新着|ニューリリース|配信開始|新登場|公開中/;
 // 評価に触れる表現（評価が渡されていない作品では禁止）
 const REVIEW_MENTION_PATTERN = /評価|レビュー|口コミ|評判|人気|支持|ランキング|星[0-9０-９]|★|[0-9０-９.]+\s*点/;
-const REVIEW_PRAISE_PATTERN = /高評価|人気|支持|評判/;
+// 評価の数値の解釈・論評（評価を使える場合でも禁止）
+const REVIEW_INTERPRET_PATTERN = /賛否|分かれ|微妙|低評価|割れ|両論|辛口|イマイチ|いまいち|酷評|不評|ばらつき/;
+// 作品内容・形態の推測や断定につながる語（作品名に含まれる場合を除く）
+const INVENTED_PATTERN = /映画化|映画版|ドラマ化|ドラマ版|実写化|アニメ化|実写版|続編|シリーズ|シーズン|リメイク|スピンオフ|原作|パロディ|オマージュ|学園|学校|職員室|教室|青春|実話|実在/;
 
 export function findBannedContent(text, title, review) {
   const issues = [];
@@ -199,15 +208,15 @@ export function findBannedContent(text, title, review) {
 
   // 評価まわり。渡された評価（件数がREVIEW_MIN_COUNT以上）がある場合のみ触れてよく、数値は渡した値と一致が必要
   const normText = String(text).normalize('NFKC');
-  const allowed = !!review && Number.isFinite(review.average) && review.count >= REVIEW_MIN_COUNT;
+  const allowed = reviewUsable(review);
   const mention = normText.match(REVIEW_MENTION_PATTERN);
-  if (mention && !normTitle.includes(mention[0].toLowerCase())) {
-    if (!allowed) {
-      issues.push({ type: 'review-unallowed', words: [mention[0]] });
-    } else if (review.average < REVIEW_HIGH_AVERAGE && REVIEW_PRAISE_PATTERN.test(normText)) {
-      issues.push({ type: 'review-praise', words: [normText.match(REVIEW_PRAISE_PATTERN)[0]] });
-    }
+  if (mention && !allowed && !normTitle.includes(mention[0].toLowerCase())) {
+    issues.push({ type: 'review-unallowed', words: [mention[0]] });
   }
+  const interp = normText.match(REVIEW_INTERPRET_PATTERN);
+  if (interp && !normTitle.includes(interp[0].toLowerCase())) issues.push({ type: 'review-interpret', words: [interp[0]] });
+  const invented = normText.match(INVENTED_PATTERN);
+  if (invented && !normTitle.includes(invented[0].toLowerCase())) issues.push({ type: 'invented', words: [invented[0]] });
   // 数字は「渡した評価の平均・件数」か「作品名に含まれる数字」のみ許可（創作された数値を防ぐ）
   const titleNums = new Set((normTitle.match(/[0-9]+(?:\.[0-9]+)?/g) || []).map(Number));
   const okNums = new Set(titleNums);
@@ -282,7 +291,8 @@ export async function generateBody(product, recentBodies) {
         fixed: `「${b.words.join('、')}」は使えません。別の表現にしてください`,
         date: `配信時期に関する表現(${b.words.join('、')})が含まれています。「新作」「最新」などを使わないでください`,
         'review-unallowed': `評価に関する表現(${b.words.join('、')})が含まれていますが、この作品は評価を使えません。評価・人気・口コミに触れないでください`,
-        'review-praise': `「${b.words.join('、')}」は平均評価が高くないため使えません。評価の数値だけを事実として書くか、評価に触れないでください`,
+        'review-interpret': `評価を解釈する表現(${b.words.join('、')})が含まれています。評価の数値の論評はせず、事実の数値だけを書くか、評価に触れないでください`,
+        invented: `渡した情報にない作品の形態・設定・派生に関する表現(${b.words.join('、')})が含まれています。作品名から言える範囲だけで書いてください`,
         number: `渡していない数字(${b.words.join('、')})が含まれています。評価の数値以外の数字を書かないでください`,
       };
       reasons.push(msg[b.type]);
