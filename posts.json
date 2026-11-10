@@ -1433,5 +1433,22 @@
     "status": "skipped",
     "created": "2026-11-10T05:16:19.197Z",
     "skipReason": "dry-run-review"
+  },
+  {
+    "contentId": "gfkw9ar3v5stxz83bvabgjpbg",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "TTM（たったら負け）",
+    "body": "たったら負けって、参加した時点でもう詰んでる気がして目を疑うタイトル。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dkhr3i8mp2xij6j6n8t7y4ny52%26season%3Dgfkw9ar3v5stxz83bvabgjpbg&af_id=peeyew-990&ch=api",
+    "category": "ドラマ",
+    "reviewAverage": 3.9,
+    "reviewCount": 10,
+    "genres": [
+      "ドラマ"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T06:01:55.125Z"
   }
 ]
