@@ -1,0 +1,24 @@
+name: '[診断用/一時] アニメ枠 DRY_RUN確認(commitなし)'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      DMM_SLOT: dmmtv
+      DMM_API_ID: ${{ secrets.DMM_API_ID }}
+      DMM_AFFILIATE_ID_THREADS: ${{ secrets.DMM_AFFILIATE_ID_THREADS }}
+      DMM_HITS: '3'
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - name: アニメ(latest)を3件生成して一覧表示
+        run: |
+          DMM_TV_MODE=latest node fetch-dmm.js
+          node -e "const a=JSON.parse(require('fs').readFileSync('posts.json','utf8'));a.slice(-3).forEach((p,i)=>console.log('  ['+(i+1)+'] '+p.category+' | '+p.title+' | '+p.body))"
