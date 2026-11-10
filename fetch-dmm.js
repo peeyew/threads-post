@@ -110,8 +110,14 @@ const existingPosts = existsSync(postsFile)
 const pendingIds = new Set(
   existingPosts.filter(p => p.status === 'pending' && p.contentId).map(p => p.contentId)
 );
+// 見送り(skipped)にした商品も、90日間は再取得しない（DRY_RUNで確認後に見送った商品が再び選ばれるのを防ぐ）
+const skippedIds = new Set(
+  existingPosts
+    .filter(p => p.status === 'skipped' && p.contentId && now - new Date(p.postedAt || p.created).getTime() < POSTED_ID_TTL_MS)
+    .map(p => p.contentId)
+);
 
-const excludedIds = new Set([...validPostedIds, ...pendingIds]);
+const excludedIds = new Set([...validPostedIds, ...pendingIds, ...skippedIds]);
 
 // 作品単位の重複排除（DMM TVのみ）。同一作品の別シーズン・別ID出品を再投稿しないよう、
 // 直近90日のposts.json（投稿済み・pending）の作品名キーを除外対象にする。
@@ -119,7 +125,7 @@ const excludedIds = new Set([...validPostedIds, ...pendingIds]);
 const seenWorkKeys = new Set(
   SLOT === 'dmmtv'
     ? existingPosts
-        .filter(p => p.title && p.status !== 'skipped' && now - new Date(p.postedAt || p.created).getTime() < POSTED_ID_TTL_MS)
+        .filter(p => p.title && now - new Date(p.postedAt || p.created).getTime() < POSTED_ID_TTL_MS)
         .map(p => workKey(p.title))
     : []
 );
@@ -172,7 +178,10 @@ let skippedLowReview = 0;
 let skippedSameWork = 0;
 let offset = 1;
 // 過去投稿＋今回すでに生成した本文（新しい順）。copy-writerへの重複回避コンテキストに使う
-const recentBodies = loadRecentBodies();
+// 他ジャンル枠は投稿実績が無い間も、同枠で生成済みの本文(状態を問わず)との重複を避ける
+const recentBodies = DMM_TV_MODE === 'other'
+  ? loadRecentBodies('./posts.json', undefined, { variant: 'other' })
+  : loadRecentBodies();
 
 try {
   while (newPosts.length < TARGET_COUNT && offset <= MAX_OFFSET) {
@@ -225,7 +234,7 @@ try {
       let body;
       try {
         const result = await generateBody(
-          { source: SLOT, title: item.title, genres: itemGenres, price: item.price },
+          { source: SLOT, mode: DMM_TV_MODE, title: item.title, genres: itemGenres, price: item.price },
           recentBodies
         );
         body = result.text;

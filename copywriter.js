@@ -50,8 +50,14 @@ const SOURCE_PROMPT = {
   },
 };
 
-function buildSystemPrompt(ngWords, source) {
+// DMM TVの他ジャンル枠(mode='other')だけに追加する指示。アニメ枠(latest/popular)のプロンプトは変えない
+const STRICT_EXTRA = `- 価格・金額・料金・「無料」「お得」「安い」「コスパ」など、お金に関する表現を一切書かない
+- アルファベット(英字)の単語を書かない。作品タイトルに含まれる語を引用する場合を除き、カタカナや日本語で書く
+- 「〜は安い」「〜はずるい」「一気見できる」「見ておく価値がある」のような、定番の締め方を繰り返さない`;
+
+function buildSystemPrompt(ngWords, source, strict = false) {
   const cfg = source === 'rakuten' ? SOURCE_PROMPT.rakuten : SOURCE_PROMPT.dmm;
+  const extra = strict ? [cfg.extra, STRICT_EXTRA].filter(Boolean).join('\n') : cfg.extra;
   return `あなたはThreadsのアフィリエイト投稿の本文だけを書くコピーライターです。
 ${cfg.intro}
 
@@ -61,7 +67,7 @@ ${cfg.intro}
 - URLは含めない（リンクは投稿システム側で本文末尾に機械的に付与するため）
 - 広告表記【PR】は付けない（投稿システム側で機械的に付与するため）
 - 次のNGワードや、それを想起させる表現は絶対に使わない: ${ngWords.join('、')}
-- 際どい表現で規約に触れそうな場合は無難な表現に倒す${cfg.extra ? `\n${cfg.extra}` : ''}
+- 際どい表現で規約に触れそうな場合は無難な表現に倒す${extra ? `\n${extra}` : ''}
 
 ## 人間らしさ（最重要）
 実際に商品ページを見た人が思わず一言つぶやいたような、ラフで揺れのある短文にする。
@@ -78,7 +84,7 @@ ${STYLE_AVOID_LIST.map(s => `- ${s}`).join('\n')}
 特定の助詞・語尾・相槌に頼らず、毎回違う言葉選びをすること。`;
 }
 
-function buildUserPrompt({ source, mediaLabel, title, genres, price }, recentBodies) {
+function buildUserPrompt({ source, mediaLabel, title, genres, price, strict = false }, recentBodies) {
   const noun = source === 'rakuten' ? '商品' : '作品';
   const genreText = genres && genres.length ? genres.slice(0, 5).join('/') : 'なし';
   const recentText = recentBodies.length
@@ -87,8 +93,7 @@ function buildUserPrompt({ source, mediaLabel, title, genres, price }, recentBod
 
   return `媒体: ${mediaLabel}
 ${noun}名: ${title}
-ジャンル: ${genreText}
-価格情報: ${price ?? '不明'}
+ジャンル: ${genreText}${strict ? '' : `\n価格情報: ${price ?? '不明'}`}
 
 直近の投稿本文（この言い回し・型を繰り返さないこと）:
 ${recentText}
@@ -102,10 +107,19 @@ function loadNgWords() {
 
 // posts.jsonから直近posted済みの本文をN件読み込む（重複回避のプロンプト用）。
 // 存在しない/読めない場合は空配列を返す（初回実行時などで異常終了させないため）。
-export function loadRecentBodies(postsFile = './posts.json', limit = RECENT_HISTORY_LIMIT) {
+// variantを指定した場合は、その枠の本文を状態(pending/posted/skipped)を問わず新しい順に返す
+// （他ジャンル枠は投稿実績が無い間も、DRY_RUN等で生成済みの本文との重複を避けたいため）
+export function loadRecentBodies(postsFile = './posts.json', limit = RECENT_HISTORY_LIMIT, { variant } = {}) {
   if (!existsSync(postsFile)) return [];
   try {
     const posts = JSON.parse(readFileSync(postsFile, 'utf-8'));
+    if (variant) {
+      return posts
+        .filter(p => p.variant === variant && p.body)
+        .sort((a, b) => new Date(b.postedAt || b.created || 0) - new Date(a.postedAt || a.created || 0))
+        .slice(0, limit)
+        .map(p => p.body);
+    }
     return posts
       .filter(p => p.status === 'posted' && p.body)
       .sort((a, b) => new Date(b.postedAt || 0) - new Date(a.postedAt || 0))
@@ -126,9 +140,30 @@ export function fallbackBody(source, title, maxLen = 40) {
 // 直近投稿と生成結果の両方に含まれていたら、1回だけ言い換えを依頼する機械的なガード
 const TIC_WATCHLIST = ['妙', 'んだよな', 'なんか', '地味に'];
 
-function findReusedTic(text, recentBodies) {
+// 他ジャンル枠で実際に繰り返された締めの型。直近の本文と同じ型が出たら言い換えさせる
+const STRICT_TIC_WATCHLIST = [
+  '安い', '安すぎ', 'ずるい', '得かも', 'は得', '損ない', '一気見', '見ておく価値', '見ておきたい', '破格',
+];
+
+function findReusedTic(text, recentBodies, watchlist = TIC_WATCHLIST) {
   const recentWindow = recentBodies.slice(0, 3).join('\n');
-  return TIC_WATCHLIST.find(tic => text.includes(tic) && recentWindow.includes(tic));
+  return watchlist.find(tic => text.includes(tic) && recentWindow.includes(tic));
+}
+
+// 他ジャンル枠(strict)で本文に入れてはいけないものを検査する。
+// - 英字の単語（作品タイトルに含まれる語は除く）
+// - 価格・金額・お得系の表現
+const PRICE_PATTERN = /[0-9０-９][0-9０-９,，.]*\s*円|無料|有料|価格|料金|税込|割引|セール|お得|格安|安い|安すぎ|コスパ|プチプラ|ワンコイン|得かも|得する|は得/;
+
+export function findBannedContent(text, title) {
+  const issues = [];
+  const normTitle = String(title || '').normalize('NFKC').toLowerCase();
+  const latin = (String(text).normalize('NFKC').match(/[A-Za-z][A-Za-z'’-]*/g) || [])
+    .filter(w => !normTitle.includes(w.toLowerCase()));
+  if (latin.length) issues.push({ type: 'latin', words: [...new Set(latin)] });
+  const price = String(text).match(PRICE_PATTERN);
+  if (price) issues.push({ type: 'price', words: [price[0]] });
+  return issues;
 }
 
 // product: { source, title, genres, price } ※sourceは'dmmtv'|'ebook'|'rakuten'
@@ -137,9 +172,11 @@ export async function generateBody(product, recentBodies) {
   const client = new Anthropic();
   const mediaLabel = MEDIA_LABEL[product.source] || product.source;
   const ngWords = loadNgWords();
-  const system = buildSystemPrompt(ngWords, product.source);
+  // 他ジャンル枠(mode='other')だけ厳格なルールを適用する。アニメ枠・楽天のプロンプトと処理は変えない
+  const strict = product.mode === 'other';
+  const system = buildSystemPrompt(ngWords, product.source, strict);
   const messages = [
-    { role: 'user', content: buildUserPrompt({ ...product, mediaLabel }, recentBodies) },
+    { role: 'user', content: buildUserPrompt({ ...product, mediaLabel, strict }, recentBodies) },
   ];
   const usage = { input_tokens: 0, output_tokens: 0 };
 
@@ -163,15 +200,41 @@ export async function generateBody(product, recentBodies) {
 
   // 直近投稿と同じ口癖が混入していたら、会話を継続して1回だけ言い換えさせる
   // （プロンプト指示だけでは防ぎきれなかったため機械的なガードとして追加）
-  const reusedTic = findReusedTic(text, recentBodies);
-  if (reusedTic) {
-    console.log(`copywriter: 口癖「${reusedTic}」を検知したため言い換えをリクエストします`);
+  if (!strict) {
+    const reusedTic = findReusedTic(text, recentBodies);
+    if (reusedTic) {
+      console.log(`copywriter: 口癖「${reusedTic}」を検知したため言い換えをリクエストします`);
+      messages.push({ role: 'assistant', content: text });
+      messages.push({
+        role: 'user',
+        content: `「${reusedTic}」は直近の投稿と重複する言い回しです。この単語を使わずに、出力は本文のみで書き直してください。`,
+      });
+      text = await requestOnce();
+    }
+    return { text, usage };
+  }
+
+  // 他ジャンル枠: 口癖(締めの型の連続)・英字・価格表現を検査し、あれば1回だけまとめて書き直させる。
+  // 英字・価格表現が書き直し後も残る場合はエラーにして、呼び出し元(fetch-dmm.js)の定型文フォールバックに任せる
+  const tics = [...TIC_WATCHLIST, ...STRICT_TIC_WATCHLIST];
+  const reusedTic = findReusedTic(text, recentBodies, tics);
+  const banned = findBannedContent(text, product.title);
+  if (reusedTic || banned.length) {
+    const reasons = [];
+    if (reusedTic) reasons.push(`「${reusedTic}」は直近の投稿と重複する言い回しです。この単語を使わないでください`);
+    for (const b of banned) {
+      reasons.push(b.type === 'latin'
+        ? `英字の単語(${b.words.join('、')})が含まれています。英字を使わず日本語で書いてください`
+        : `金額・お得に関する表現(${b.words.join('、')})が含まれています。お金に触れないでください`);
+    }
+    console.log(`copywriter: 再生成します(${reasons.join(' / ')})`);
     messages.push({ role: 'assistant', content: text });
-    messages.push({
-      role: 'user',
-      content: `「${reusedTic}」は直近の投稿と重複する言い回しです。この単語を使わずに、出力は本文のみで書き直してください。`,
-    });
+    messages.push({ role: 'user', content: `${reasons.join('。')}。出力は本文のみで書き直してください。` });
     text = await requestOnce();
+    const still = findBannedContent(text, product.title);
+    if (still.length) {
+      throw new Error(`copywriter: 再生成後も禁止表現が残りました(${still.map(b => `${b.type}:${b.words.join(',')}`).join(' ')})`);
+    }
   }
 
   return { text, usage };
