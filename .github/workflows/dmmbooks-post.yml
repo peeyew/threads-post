@@ -1,8 +1,9 @@
 name: DMMブックス Threads自動投稿
 
 on:
-  schedule:
-    - cron: '0 11 * * *'  # 20:00 JST = 11:00 UTC
+  # 2026-11-10: DMM投稿をdmmtvのみに絞るため定期実行を停止中。再開する時は下の2行のコメントを外す
+  # schedule:
+  #   - cron: '0 11 * * *'  # 20:00 JST = 11:00 UTC
   workflow_dispatch:
     inputs:
       dry_run:
