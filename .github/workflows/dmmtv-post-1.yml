@@ -39,6 +39,7 @@ jobs:
           GAS_ENDPOINT: ${{ secrets.GAS_ENDPOINT }}
           DMM_AFFILIATE_ID_THREADS_DISPLAY: ${{ vars.DMM_AFFILIATE_ID_THREADS_DISPLAY }}
           POST_SOURCE: dmmtv
+          POST_VARIANT: latest
           DRY_RUN: ${{ inputs.dry_run }}
       - name: posts.json/posted-ids.jsonの変更をコミット
         # post-threads.jsが失敗しても、fetch-dmm.jsが積んだpendingエントリを

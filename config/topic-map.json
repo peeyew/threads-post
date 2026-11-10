@@ -1,5 +1,12 @@
 {
-  "dmmtv": "アニメ好き",
+  "dmmtv": {
+    "rules": [
+      { "genres": ["ドラマ"], "topic": "ドラマ好き" },
+      { "genres": ["映画"], "topic": "映画好き" },
+      { "genres": ["バラエティ"], "topic": "バラエティ好き" }
+    ],
+    "default": "アニメ好き"
+  },
   "ebook": {
     "rules": [
       { "genres": ["グラビア", "アイドル", "水着"], "topic": "写真集" },

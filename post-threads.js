@@ -28,6 +28,9 @@ const DISPLAY_AFFILIATE_ID = process.env.DMM_AFFILIATE_ID_THREADS_DISPLAY;
 
 // 種別を限定して投稿したい場合に'dmmtv'|'ebook'|'rakuten'を指定する。未設定なら種別を問わず先頭を選ぶ
 const POST_SOURCE = process.env.POST_SOURCE;
+// dmmtvの枠（latest/popular/other）ごとにpendingを分けたい場合に指定する。未設定なら枠を問わない。
+// otherのDRY_RUNで積んだpendingがアニメ枠から消化されてしまうのを防ぐ
+const POST_VARIANT = process.env.POST_VARIANT;
 
 // リンクを本文ではなくリプライに付ける種別
 const LINK_IN_REPLY_SOURCES = new Set(['rakuten']);
@@ -50,10 +53,10 @@ if (!existsSync(postsFile)) {
 }
 
 const posts = JSON.parse(readFileSync(postsFile, 'utf-8'));
-const next = posts.find(p => p.status === 'pending' && (!POST_SOURCE || p.source === POST_SOURCE));
+const next = posts.find(p => p.status === 'pending' && (!POST_SOURCE || p.source === POST_SOURCE) && (!POST_VARIANT || p.variant === POST_VARIANT));
 
 if (!next) {
-  console.log(POST_SOURCE ? `対象種別(${POST_SOURCE})の投稿待ちの記事がありません` : '投稿待ちの記事がありません');
+  console.log(POST_SOURCE ? `対象種別(${POST_SOURCE}${POST_VARIANT ? `/${POST_VARIANT}` : ''})の投稿待ちの記事がありません` : '投稿待ちの記事がありません');
   process.exit(0);
 }
 

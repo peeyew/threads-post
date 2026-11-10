@@ -1,0 +1,76 @@
+name: DMM TV Threads自動投稿(3・他ジャンル)
+
+on:
+  # 他ジャンル(ドラマ/映画/バラエティ)枠。当面はDRY_RUN確認のためworkflow_dispatchのみ。
+  # DRY_RUNを数回確認して問題なければ、下の2行のコメントを外して20:00 JSTの定期実行にする
+  # schedule:
+  #   - cron: '0 11 * * *'  # 20:00 JST = 11:00 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'DRY_RUN (1ならThreadsへの実際の投稿をスキップしログのみ出力)'
+        required: false
+        default: '1'
+
+permissions:
+  contents: write
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - name: DMM TV商品を1件取得
+        run: node fetch-dmm.js
+        env:
+          DMM_SLOT: dmmtv
+          DMM_TV_MODE: other
+          DMM_API_ID: ${{ secrets.DMM_API_ID }}
+          DMM_AFFILIATE_ID_THREADS: ${{ secrets.DMM_AFFILIATE_ID_THREADS }}
+          DMM_HITS: '1'
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - name: Threads投稿
+        run: node post-threads.js
+        env:
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          GAS_ENDPOINT: ${{ secrets.GAS_ENDPOINT }}
+          DMM_AFFILIATE_ID_THREADS_DISPLAY: ${{ vars.DMM_AFFILIATE_ID_THREADS_DISPLAY }}
+          POST_SOURCE: dmmtv
+          POST_VARIANT: other
+          # schedule実行時はinputsが空になるため、未指定ならDRY_RUN=1に倒す（誤投稿防止）。
+          # 本番投稿を始める時は、このデフォルトを'0'に変更する
+          DRY_RUN: ${{ inputs.dry_run || '1' }}
+      - name: posts.json/posted-ids.jsonの変更をコミット
+        # post-threads.jsが失敗しても、fetch-dmm.jsが積んだpendingエントリを
+        # 失わないよう必ず実行する（次回実行時のリトライ対象として残すため）。
+        # 複数のworkflowがほぼ同時に走ってpushが競合した場合に備え、
+        # 失敗時はgit pull --rebaseしてから再pushを最大3回まで試みる。
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add posts.json posted-ids.json
+          if git diff --cached --quiet; then
+            echo "変更なし"
+          else
+            git commit -m "chore: update posts.json/posted-ids.json [skip ci]"
+            success=0
+            for i in 1 2 3; do
+              if git push; then
+                echo "push成功(試行${i}回目)"
+                success=1
+                break
+              fi
+              echo "push失敗(試行${i}回目)。git pull --rebaseしてリトライします"
+              git pull --rebase
+            done
+            if [ "$success" != "1" ]; then
+              echo "3回リトライしてもpushに失敗しました"
+              exit 1
+            fi
+          fi

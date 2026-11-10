@@ -36,6 +36,7 @@
 import dotenv from 'dotenv';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import { generateBody, loadRecentBodies, fallbackBody } from './copywriter.js';
+import { workKey, categorize } from './dmmtv-select.js';
 
 dotenv.config();
 
@@ -57,13 +58,25 @@ const FLOOR = process.env.DMM_FLOOR
 // DMM_TV_MODE: DMM_SLOT=dmmtvの場合のみ意味を持つ。'latest'(新着順)または'popular'(評価順)。
 // 未指定なら従来通りランキング取得（sort=rank・keywordなし）を維持する。
 const DMM_TV_MODE = process.env.DMM_TV_MODE;
-if (DMM_TV_MODE && !['latest', 'popular'].includes(DMM_TV_MODE)) {
-  console.error(`DMM_TV_MODEは'latest'または'popular'を指定してください（実際: ${DMM_TV_MODE}）`);
+if (DMM_TV_MODE && !['latest', 'popular', 'other'].includes(DMM_TV_MODE)) {
+  console.error(`DMM_TV_MODEは'latest'|'popular'|'other'を指定してください（実際: ${DMM_TV_MODE}）`);
   process.exit(1);
 }
+// other: アニメ以外のジャンル（ドラマ/映画/バラエティ等）。sort=review/dateは実写グラビア等の
+// 混入が多いことを実データで確認したため使わず、ランキング(sort=rank)のみで取得する。
 const SORT = DMM_TV_MODE === 'latest' ? 'date' : DMM_TV_MODE === 'popular' ? 'review' : 'rank';
 // dmmtv_videoのItemList APIはgenre情報を返さないため、ジャンル絞り込みはkeyword検索で代用する
-const KEYWORD = SLOT === 'dmmtv' && DMM_TV_MODE ? 'アニメ' : '';
+// otherのキーワードはconfig/dmmtv-other-keywords.jsonからランダムに1つ選ぶ（DMM_TV_KEYWORDで固定も可）
+function pickOtherKeyword() {
+  if (process.env.DMM_TV_KEYWORD) return process.env.DMM_TV_KEYWORD;
+  const list = JSON.parse(readFileSync('./config/dmmtv-other-keywords.json', 'utf-8'));
+  return list[Math.floor(Math.random() * list.length)];
+}
+const KEYWORD = SLOT !== 'dmmtv' || !DMM_TV_MODE ? '' : DMM_TV_MODE === 'other' ? pickOtherKeyword() : 'アニメ';
+
+// sort=review（平均評価順）は、評価1件で★5.00の商品が上位に来てしまう（実写グラビアの混入原因だった）。
+// 評価件数の下限を設けて少数評価の商品を除外する
+const MIN_REVIEW_COUNT = DMM_TV_MODE === 'popular' ? Number(process.env.DMM_MIN_REVIEW_COUNT || '5') : 0;
 
 // DMM TVはItemList APIがimageURLを返さないため、画像なし(TEXT投稿)を許容する。
 // DMMブックスは画像付きIMAGE投稿にする方針のため、imageURLがない商品は除外する。
@@ -100,6 +113,17 @@ const pendingIds = new Set(
 
 const excludedIds = new Set([...validPostedIds, ...pendingIds]);
 
+// 作品単位の重複排除（DMM TVのみ）。同一作品の別シーズン・別ID出品を再投稿しないよう、
+// 直近90日のposts.json（投稿済み・pending）の作品名キーを除外対象にする。
+// ※ titleは後から保存するようになったため、古いエントリには無く、その分は除外できない
+const seenWorkKeys = new Set(
+  SLOT === 'dmmtv'
+    ? existingPosts
+        .filter(p => p.title && p.status !== 'skipped' && now - new Date(p.postedAt || p.created).getTime() < POSTED_ID_TTL_MS)
+        .map(p => workKey(p.title))
+    : []
+);
+
 // NGワードフィルタ（未成年を想起させる語を含む商品はposts.jsonに書き込まない）
 // リストはconfig/ng-words.jsonで管理（要調整時はそちらだけ編集すればよい）
 const ngWords = JSON.parse(readFileSync('./config/ng-words.json', 'utf-8'));
@@ -130,6 +154,7 @@ async function fetchPage(offset) {
     contentId: item.content_id || item.product_id || item.URL,
     title: item.title,
     price: item.prices?.price ?? null,
+    reviewCount: Number(item.review?.count ?? 0),
     imageUrl: item.imageURL?.large || item.imageURL?.list || item.imageURL?.small || '',
     url: item.affiliateURL || item.URL,
     genres: (item.iteminfo?.genre || []).map(g => g.name),
@@ -143,6 +168,8 @@ let skippedNg = 0;
 let skippedNonAnimeId = 0;
 let skippedDuplicate = 0;
 let skippedNoImage = 0;
+let skippedLowReview = 0;
+let skippedSameWork = 0;
 let offset = 1;
 // 過去投稿＋今回すでに生成した本文（新しい順）。copy-writerへの重複回避コンテキストに使う
 const recentBodies = loadRecentBodies();
@@ -166,6 +193,16 @@ try {
         continue;
       }
 
+      if (item.reviewCount < MIN_REVIEW_COUNT) {
+        skippedLowReview++;
+        continue;
+      }
+
+      if (SLOT === 'dmmtv' && seenWorkKeys.has(workKey(item.title))) {
+        skippedSameWork++;
+        continue;
+      }
+
       if (NON_ANIME_ID_PATTERN.test(item.contentId)) {
         skippedNonAnimeId++;
         console.log(`品番風contentIdのためスキップ: ${item.contentId} (${item.title.slice(0, 40)}...)`);
@@ -178,10 +215,17 @@ try {
         continue;
       }
 
+      // dmmtvはAPIがジャンルを返さないため、枠とキーワードから決めたcategoryをgenresとして記録する
+      // （シートのgenres列に入り、ジャンル別のviews比較に使う）
+      const category = SLOT === 'dmmtv'
+        ? categorize({ mode: DMM_TV_MODE, keyword: KEYWORD, title: item.title })
+        : undefined;
+      const itemGenres = category ? [category] : item.genres;
+
       let body;
       try {
         const result = await generateBody(
-          { source: SLOT, title: item.title, genres: item.genres, price: item.price },
+          { source: SLOT, title: item.title, genres: itemGenres, price: item.price },
           recentBodies
         );
         body = result.text;
@@ -199,11 +243,13 @@ try {
         body,
         imageUrl: item.imageUrl || '',
         url: item.url,
-        genres: item.genres || [],
+        ...(category ? { category } : {}),
+        genres: itemGenres || [],
         status: 'pending',
         created: new Date().toISOString(),
       });
       excludedIds.add(item.contentId); // 同一実行内での重複追加も防ぐ
+      seenWorkKeys.add(workKey(item.title));
     }
 
     offset += PAGE_SIZE;
@@ -213,7 +259,7 @@ try {
   process.exit(1);
 }
 
-console.log(`新規${newPosts.length}件（重複${skippedDuplicate}件・NGワード${skippedNg}件・品番風ID${skippedNonAnimeId}件・画像なし${skippedNoImage}件をスキップ）`);
+console.log(`新規${newPosts.length}件（重複${skippedDuplicate}件・NGワード${skippedNg}件・品番風ID${skippedNonAnimeId}件・画像なし${skippedNoImage}件・評価件数不足${skippedLowReview}件・同一作品${skippedSameWork}件をスキップ）`);
 
 // posts.jsonに追記（posted-ids.jsonへの書き込みはここでは行わない。post-threads.js参照）
 const merged = [...existingPosts, ...newPosts];
