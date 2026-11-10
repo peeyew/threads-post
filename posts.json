@@ -1230,5 +1230,20 @@
     ],
     "status": "pending",
     "created": "2026-11-10T05:02:19.330Z"
+  },
+  {
+    "contentId": "ff3cj9aif1myv82db1xebys3j",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "黄昏アウトフォーカス",
+    "body": "光のピントが合う瞬間と心がすれ違う瞬間が重なる、そんな画作りに見入ってしまった。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D5t4nm75bv79ewu1wgd46jf4gc%26season%3Dff3cj9aif1myv82db1xebys3j&af_id=peeyew-990&ch=api",
+    "category": "映画",
+    "genres": [
+      "映画"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T05:02:42.434Z"
   }
 ]
