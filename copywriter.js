@@ -51,7 +51,10 @@ const SOURCE_PROMPT = {
 };
 
 // DMM TVの他ジャンル枠(mode='other')だけに追加する指示。アニメ枠(latest/popular)のプロンプトは変えない
-const STRICT_EXTRA = `- 渡された情報（作品名・ジャンル）に無い内容を書かない。あらすじ・登場人物・出演者・制作陣・元ネタ・パロディ元・原作・受賞歴などを、推測でも断定でも書かない
+const STRICT_EXTRA = `- 渡された情報（作品名・ジャンル・評価が渡された場合はその評価）に無い内容を書かない。あらすじ・登場人物・出演者・制作陣・元ネタ・パロディ元・原作・受賞歴などを、推測でも断定でも書かない
+- 評価は「評価: 平均◯◯（◯件）」と渡された場合だけ触れてよい。触れる場合は渡された数値をそのまま使い（例:「評価4.8（1,200件）」）、他の数字を書かない。「高評価」「人気」などの言い換えも、評価が渡された場合に限って使ってよい
+- 「評価: なし」と渡された場合は、評価・人気・口コミ・レビュー・ランキングに一切触れない（作品名とジャンルへの反応だけで書く）
+- 配信日・公開時期に触れない。「新作」「最新」「最新作」「新着」とも書かない
 - 実際に視聴した体験を装う表現を書かない。「見入ってしまった」「再生ボタン押してた」「目が離せなくなった」「泣けてくる」「観終わった」「ハマった」「思わず」「気づいたら」など、視聴済みの人の感想として語らない。作品名とジャンルから言える範囲の印象や特徴を、一般的な言い方で書く
 - 「妙に」「地味に」は使わない
 - 価格・金額・料金・「無料」「お得」「安い」「コスパ」など、お金に関する表現を一切書かない
@@ -87,7 +90,16 @@ ${STYLE_AVOID_LIST.map(s => `- ${s}`).join('\n')}
 特定の助詞・語尾・相槌に頼らず、毎回違う言葉選びをすること。`;
 }
 
-function buildUserPrompt({ source, mediaLabel, title, genres, price, strict = false }, recentBodies) {
+// 評価を本文に使ってよい最小件数（他ジャンル枠）。これ未満・評価なしは「評価: なし」として渡す
+export const REVIEW_MIN_COUNT = 20;
+const REVIEW_HIGH_AVERAGE = 4.0; // 「高評価」「人気」等の言い換えを許す平均評価の下限
+
+function formatReviewLine(review) {
+  if (!review || !Number.isFinite(review.average) || !(review.count >= REVIEW_MIN_COUNT)) return '評価: なし';
+  return `評価: 平均${review.average}（${review.count.toLocaleString('en-US')}件）`;
+}
+
+function buildUserPrompt({ source, mediaLabel, title, genres, price, strict = false, review }, recentBodies) {
   const noun = source === 'rakuten' ? '商品' : '作品';
   const genreText = genres && genres.length ? genres.slice(0, 5).join('/') : 'なし';
   const recentText = recentBodies.length
@@ -96,7 +108,7 @@ function buildUserPrompt({ source, mediaLabel, title, genres, price, strict = fa
 
   return `媒体: ${mediaLabel}
 ${noun}名: ${title}
-ジャンル: ${genreText}${strict ? '' : `\n価格情報: ${price ?? '不明'}`}
+ジャンル: ${genreText}${strict ? `\n${formatReviewLine(review)}` : `\n価格情報: ${price ?? '不明'}`}
 
 直近の投稿本文（この言い回し・型を繰り返さないこと）:
 ${recentText}
@@ -164,7 +176,13 @@ const EXPERIENCE_PATTERN = /見入(っ|り)|再生(ボタン)?を?押|目が離�
 // 常に避ける口癖（直近の本文との重複とは無関係に禁止）
 const FIXED_AVOID_PATTERN = /妙に|地味に/;
 
-export function findBannedContent(text, title) {
+// 配信日・公開時期を匂わせる表現
+const DATE_PATTERN = /新作|最新|新着|ニューリリース|配信開始|新登場|公開中/;
+// 評価に触れる表現（評価が渡されていない作品では禁止）
+const REVIEW_MENTION_PATTERN = /評価|レビュー|口コミ|評判|人気|支持|ランキング|星[0-9０-９]|★|[0-9０-９.]+\s*点/;
+const REVIEW_PRAISE_PATTERN = /高評価|人気|支持|評判/;
+
+export function findBannedContent(text, title, review) {
   const issues = [];
   const normTitle = String(title || '').normalize('NFKC').toLowerCase();
   const latin = (String(text).normalize('NFKC').match(/[A-Za-z][A-Za-z'’-]*/g) || [])
@@ -176,6 +194,27 @@ export function findBannedContent(text, title) {
   if (exp) issues.push({ type: 'experience', words: [exp[0]] });
   const fixed = String(text).match(FIXED_AVOID_PATTERN);
   if (fixed) issues.push({ type: 'fixed', words: [fixed[0]] });
+  const date = String(text).match(DATE_PATTERN);
+  if (date) issues.push({ type: 'date', words: [date[0]] });
+
+  // 評価まわり。渡された評価（件数がREVIEW_MIN_COUNT以上）がある場合のみ触れてよく、数値は渡した値と一致が必要
+  const normText = String(text).normalize('NFKC');
+  const allowed = !!review && Number.isFinite(review.average) && review.count >= REVIEW_MIN_COUNT;
+  const mention = normText.match(REVIEW_MENTION_PATTERN);
+  if (mention && !normTitle.includes(mention[0].toLowerCase())) {
+    if (!allowed) {
+      issues.push({ type: 'review-unallowed', words: [mention[0]] });
+    } else if (review.average < REVIEW_HIGH_AVERAGE && REVIEW_PRAISE_PATTERN.test(normText)) {
+      issues.push({ type: 'review-praise', words: [normText.match(REVIEW_PRAISE_PATTERN)[0]] });
+    }
+  }
+  // 数字は「渡した評価の平均・件数」か「作品名に含まれる数字」のみ許可（創作された数値を防ぐ）
+  const titleNums = new Set((normTitle.match(/[0-9]+(?:\.[0-9]+)?/g) || []).map(Number));
+  const okNums = new Set(titleNums);
+  if (allowed) { okNums.add(review.average); okNums.add(review.count); }
+  const badNums = (normText.replace(/(\d),(\d{3})/g, '$1$2').match(/[0-9]+(?:\.[0-9]+)?/g) || [])
+    .map(Number).filter(n => !okNums.has(n));
+  if (badNums.length) issues.push({ type: 'number', words: [...new Set(badNums)].map(String) });
   return issues;
 }
 
@@ -231,7 +270,7 @@ export async function generateBody(product, recentBodies) {
   // 英字・価格表現が書き直し後も残る場合はエラーにして、呼び出し元(fetch-dmm.js)の定型文フォールバックに任せる
   const tics = [...TIC_WATCHLIST, ...STRICT_TIC_WATCHLIST];
   const reusedTic = findReusedTic(text, recentBodies, tics);
-  const banned = findBannedContent(text, product.title);
+  const banned = findBannedContent(text, product.title, product.review);
   if (reusedTic || banned.length) {
     const reasons = [];
     if (reusedTic) reasons.push(`「${reusedTic}」は直近の投稿と重複する言い回しです。この単語を使わないでください`);
@@ -241,6 +280,10 @@ export async function generateBody(product, recentBodies) {
         price: `金額・お得に関する表現(${b.words.join('、')})が含まれています。お金に触れないでください`,
         experience: `視聴した体験を装う表現(${b.words.join('、')})が含まれています。体験談の形を避け、作品名とジャンルから言える一般的な印象や特徴で書いてください`,
         fixed: `「${b.words.join('、')}」は使えません。別の表現にしてください`,
+        date: `配信時期に関する表現(${b.words.join('、')})が含まれています。「新作」「最新」などを使わないでください`,
+        'review-unallowed': `評価に関する表現(${b.words.join('、')})が含まれていますが、この作品は評価を使えません。評価・人気・口コミに触れないでください`,
+        'review-praise': `「${b.words.join('、')}」は平均評価が高くないため使えません。評価の数値だけを事実として書くか、評価に触れないでください`,
+        number: `渡していない数字(${b.words.join('、')})が含まれています。評価の数値以外の数字を書かないでください`,
       };
       reasons.push(msg[b.type]);
     }
@@ -248,7 +291,7 @@ export async function generateBody(product, recentBodies) {
     messages.push({ role: 'assistant', content: text });
     messages.push({ role: 'user', content: `${reasons.join('。')}。出力は本文のみで書き直してください。` });
     text = await requestOnce();
-    const still = findBannedContent(text, product.title);
+    const still = findBannedContent(text, product.title, product.review);
     if (still.length) {
       throw new Error(`copywriter: 再生成後も禁止表現が残りました(${still.map(b => `${b.type}:${b.words.join(',')}`).join(' ')})`);
     }

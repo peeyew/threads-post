@@ -161,6 +161,7 @@ async function fetchPage(offset) {
     title: item.title,
     price: item.prices?.price ?? null,
     reviewCount: Number(item.review?.count ?? 0),
+    reviewAverage: item.review?.average != null ? Number(item.review.average) : null,
     imageUrl: item.imageURL?.large || item.imageURL?.list || item.imageURL?.small || '',
     url: item.affiliateURL || item.URL,
     genres: (item.iteminfo?.genre || []).map(g => g.name),
@@ -234,7 +235,11 @@ try {
       let body;
       try {
         const result = await generateBody(
-          { source: SLOT, mode: DMM_TV_MODE, title: item.title, genres: itemGenres, price: item.price },
+          {
+            source: SLOT, mode: DMM_TV_MODE, title: item.title, genres: itemGenres, price: item.price,
+            // 他ジャンル枠のみ評価を渡す（本文に使えるかどうかはcopywriter.js側で件数により判定）
+            ...(DMM_TV_MODE === 'other' ? { review: { average: item.reviewAverage, count: item.reviewCount } } : {}),
+          },
           recentBodies
         );
         body = result.text;
@@ -253,6 +258,8 @@ try {
         imageUrl: item.imageUrl || '',
         url: item.url,
         ...(category ? { category } : {}),
+        // 他ジャンル枠は本文生成に渡した評価の元値を記録（本文の数値が事実と合っているかの後確認用）
+        ...(DMM_TV_MODE === 'other' ? { reviewAverage: item.reviewAverage, reviewCount: item.reviewCount } : {}),
         genres: itemGenres || [],
         status: 'pending',
         created: new Date().toISOString(),
