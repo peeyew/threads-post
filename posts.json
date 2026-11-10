@@ -1501,5 +1501,22 @@
     ],
     "status": "pending",
     "created": "2026-11-10T06:03:05.060Z"
+  },
+  {
+    "contentId": "t8pntfkbhniwj121f71fc9nd7",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "映画 それいけ！アンパンマン リズムでてあそび アンパンマンとふしぎなパラソル",
+    "body": "てあそび要素入ってるの気になる、親子で一緒に体動かす系かこれ。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dt8pntfkbhniwj121f71fc9nd7%26season%3Dt8pntfkbhniwj121f71fc9nd7&af_id=peeyew-990&ch=api",
+    "category": "映画",
+    "reviewAverage": null,
+    "reviewCount": 0,
+    "genres": [
+      "映画"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T06:03:30.429Z"
   }
 ]
