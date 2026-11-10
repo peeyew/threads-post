@@ -1450,5 +1450,22 @@
     ],
     "status": "pending",
     "created": "2026-11-10T06:01:55.125Z"
+  },
+  {
+    "contentId": "ipptju9ypug2uauswomhgd3kr",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "魁!!男塾",
+    "body": "塾という響きからかけ離れた熱量、タイトルだけで胃もたれしそうな気配がする。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D2h3q61q6zav9uhpfmpcghzsbp%26season%3Dipptju9ypug2uauswomhgd3kr&af_id=peeyew-990&ch=api",
+    "category": "映画",
+    "reviewAverage": 4,
+    "reviewCount": 6,
+    "genres": [
+      "映画"
+    ],
+    "status": "pending",
+    "created": "2026-11-10T06:02:17.423Z"
   }
 ]
