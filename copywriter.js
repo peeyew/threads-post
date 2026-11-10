@@ -51,7 +51,10 @@ const SOURCE_PROMPT = {
 };
 
 // DMM TVの他ジャンル枠(mode='other')だけに追加する指示。アニメ枠(latest/popular)のプロンプトは変えない
-const STRICT_EXTRA = `- 価格・金額・料金・「無料」「お得」「安い」「コスパ」など、お金に関する表現を一切書かない
+const STRICT_EXTRA = `- 渡された情報（作品名・ジャンル）に無い内容を書かない。あらすじ・登場人物・出演者・制作陣・元ネタ・パロディ元・原作・受賞歴などを、推測でも断定でも書かない
+- 実際に視聴した体験を装う表現を書かない。「見入ってしまった」「再生ボタン押してた」「目が離せなくなった」「泣けてくる」「観終わった」「ハマった」「思わず」「気づいたら」など、視聴済みの人の感想として語らない。作品名とジャンルから言える範囲の印象や特徴を、一般的な言い方で書く
+- 「妙に」「地味に」は使わない
+- 価格・金額・料金・「無料」「お得」「安い」「コスパ」など、お金に関する表現を一切書かない
 - アルファベット(英字)の単語を書かない。作品タイトルに含まれる語を引用する場合を除き、カタカナや日本語で書く
 - 「〜は安い」「〜はずるい」「一気見できる」「見ておく価値がある」のような、定番の締め方を繰り返さない`;
 
@@ -155,6 +158,11 @@ function findReusedTic(text, recentBodies, watchlist = TIC_WATCHLIST) {
 // - 価格・金額・お得系の表現
 const PRICE_PATTERN = /[0-9０-９][0-9０-９,，.]*\s*円|無料|有料|価格|料金|税込|割引|セール|お得|格安|安い|安すぎ|コスパ|プチプラ|ワンコイン|得かも|得する|は得/;
 
+// 視聴体験を装う表現（他ジャンル枠は作品内容の情報を持たないため、体験談の形を取らせない）
+const EXPERIENCE_PATTERN = /見入(っ|り)|再生(ボタン)?を?押|目が離せ|泣けて(き|く)|泣け(た|ちゃ)|泣い(た|て)|(観|見)(た(?!目)|てい?た|終|返し)|ハマ(っ|り)|引き込まれ|夢中にな|気づ(いたら|けば)|思わず|感動し(た|て)|笑っ(た|ちゃ)|驚い(た|て)|心を(掴|つか)まれ|余韻に浸/;
+// 常に避ける口癖（直近の本文との重複とは無関係に禁止）
+const FIXED_AVOID_PATTERN = /妙に|地味に/;
+
 export function findBannedContent(text, title) {
   const issues = [];
   const normTitle = String(title || '').normalize('NFKC').toLowerCase();
@@ -163,6 +171,10 @@ export function findBannedContent(text, title) {
   if (latin.length) issues.push({ type: 'latin', words: [...new Set(latin)] });
   const price = String(text).match(PRICE_PATTERN);
   if (price) issues.push({ type: 'price', words: [price[0]] });
+  const exp = String(text).match(EXPERIENCE_PATTERN);
+  if (exp) issues.push({ type: 'experience', words: [exp[0]] });
+  const fixed = String(text).match(FIXED_AVOID_PATTERN);
+  if (fixed) issues.push({ type: 'fixed', words: [fixed[0]] });
   return issues;
 }
 
@@ -223,9 +235,13 @@ export async function generateBody(product, recentBodies) {
     const reasons = [];
     if (reusedTic) reasons.push(`「${reusedTic}」は直近の投稿と重複する言い回しです。この単語を使わないでください`);
     for (const b of banned) {
-      reasons.push(b.type === 'latin'
-        ? `英字の単語(${b.words.join('、')})が含まれています。英字を使わず日本語で書いてください`
-        : `金額・お得に関する表現(${b.words.join('、')})が含まれています。お金に触れないでください`);
+      const msg = {
+        latin: `英字の単語(${b.words.join('、')})が含まれています。英字を使わず日本語で書いてください`,
+        price: `金額・お得に関する表現(${b.words.join('、')})が含まれています。お金に触れないでください`,
+        experience: `視聴した体験を装う表現(${b.words.join('、')})が含まれています。体験談の形を避け、作品名とジャンルから言える一般的な印象や特徴で書いてください`,
+        fixed: `「${b.words.join('、')}」は使えません。別の表現にしてください`,
+      };
+      reasons.push(msg[b.type]);
     }
     console.log(`copywriter: 再生成します(${reasons.join(' / ')})`);
     messages.push({ role: 'assistant', content: text });

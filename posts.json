@@ -1228,8 +1228,9 @@
     "genres": [
       "ドラマ"
     ],
-    "status": "pending",
-    "created": "2026-11-10T05:02:19.330Z"
+    "status": "skipped",
+    "created": "2026-11-10T05:02:19.330Z",
+    "skipReason": "dry-run-review"
   },
   {
     "contentId": "ff3cj9aif1myv82db1xebys3j",
@@ -1243,8 +1244,9 @@
     "genres": [
       "映画"
     ],
-    "status": "pending",
-    "created": "2026-11-10T05:02:42.434Z"
+    "status": "skipped",
+    "created": "2026-11-10T05:02:42.434Z",
+    "skipReason": "dry-run-review"
   },
   {
     "contentId": "2k7xkt6igev8yqbfqn9m7hrfi",
@@ -1258,8 +1260,9 @@
     "genres": [
       "バラエティ"
     ],
-    "status": "pending",
-    "created": "2026-11-10T05:03:05.586Z"
+    "status": "skipped",
+    "created": "2026-11-10T05:03:05.586Z",
+    "skipReason": "dry-run-review"
   },
   {
     "contentId": "4yjagy2cur4se7sjnp3dmizv4",
@@ -1273,8 +1276,9 @@
     "genres": [
       "ドラマ"
     ],
-    "status": "pending",
-    "created": "2026-11-10T05:03:30.792Z"
+    "status": "skipped",
+    "created": "2026-11-10T05:03:30.792Z",
+    "skipReason": "dry-run-review"
   },
   {
     "contentId": "ak8ci1priernmk25a07vxso94",
@@ -1288,7 +1292,8 @@
     "genres": [
       "映画"
     ],
-    "status": "pending",
-    "created": "2026-11-10T05:03:55.387Z"
+    "status": "skipped",
+    "created": "2026-11-10T05:03:55.387Z",
+    "skipReason": "dry-run-review"
   }
 ]
