@@ -1623,5 +1623,23 @@
     "status": "posted",
     "created": "2026-11-12T08:54:51.808Z",
     "postedAt": "2026-11-12T08:55:02.062Z"
+  },
+  {
+    "contentId": "kp4c00r66hh4bm33a1tyd0jws",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "衝動",
+    "body": "衝動ってタイトルだけで、もう理性どっか置いてきたの丸わかりだな。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dkp4c00r66hh4bm33a1tyd0jws%26season%3Dkp4c00r66hh4bm33a1tyd0jws&af_id=peeyew-990&ch=api",
+    "category": "映画",
+    "reviewAverage": null,
+    "reviewCount": 0,
+    "genres": [
+      "映画"
+    ],
+    "status": "posted",
+    "created": "2026-11-12T18:41:25.318Z",
+    "postedAt": "2026-11-12T18:41:41.629Z"
   }
 ]
