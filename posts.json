@@ -1723,5 +1723,23 @@
     "status": "posted",
     "created": "2026-11-14T08:14:15.396Z",
     "postedAt": "2026-11-14T08:14:27.920Z"
+  },
+  {
+    "contentId": "b10r2jsjp5hvh4xdgxx9vqzpi",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "ゴジラ",
+    "body": "あの咆哮を聞くだけで画面の前で身構えちゃう人、絶対いるよな。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Db10r2jsjp5hvh4xdgxx9vqzpi%26season%3Db10r2jsjp5hvh4xdgxx9vqzpi&af_id=peeyew-990&ch=api",
+    "category": "映画",
+    "reviewAverage": 4.5,
+    "reviewCount": 2,
+    "genres": [
+      "映画"
+    ],
+    "status": "posted",
+    "created": "2026-11-14T16:50:55.496Z",
+    "postedAt": "2026-11-14T16:51:12.519Z"
   }
 ]
