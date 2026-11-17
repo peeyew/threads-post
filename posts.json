@@ -1873,5 +1873,23 @@
     "status": "posted",
     "created": "2026-11-17T09:50:51.480Z",
     "postedAt": "2026-11-17T09:51:05.007Z"
+  },
+  {
+    "contentId": "mjxrveihjqpj5nyr4xfxnao4i",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "ラブライブ！",
+    "body": "タイトル聞いただけで頭の中に曲流れてくる人、相当多いだろうな。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Drnhxn0xk97oc91gm1pj1ywvga%26season%3Dmjxrveihjqpj5nyr4xfxnao4i&af_id=peeyew-990&ch=api",
+    "category": "ドラマ",
+    "reviewAverage": 4.09,
+    "reviewCount": 11,
+    "genres": [
+      "ドラマ"
+    ],
+    "status": "posted",
+    "created": "2026-11-17T19:37:30.291Z",
+    "postedAt": "2026-11-17T19:37:58.291Z"
   }
 ]
