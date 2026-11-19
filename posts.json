@@ -1973,5 +1973,23 @@
     "status": "posted",
     "created": "2026-11-19T09:36:25.417Z",
     "postedAt": "2026-11-19T09:36:39.722Z"
+  },
+  {
+    "contentId": "f93hrhip8hev6koy71i5dqqge",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "こういうのがいい",
+    "body": "「こういうのがいい」って即答できるタイトル、逆に中身が気になる。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dpd6vg8g0ht7neeim34265fh2b%26season%3Df93hrhip8hev6koy71i5dqqge&af_id=peeyew-990&ch=api",
+    "category": "ドラマ",
+    "reviewAverage": 4,
+    "reviewCount": 6,
+    "genres": [
+      "ドラマ"
+    ],
+    "status": "posted",
+    "created": "2026-11-19T19:20:56.846Z",
+    "postedAt": "2026-11-19T19:21:08.323Z"
   }
 ]
