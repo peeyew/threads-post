@@ -2073,5 +2073,23 @@
     "status": "posted",
     "created": "2026-11-21T08:55:06.203Z",
     "postedAt": "2026-11-21T08:55:18.595Z"
+  },
+  {
+    "contentId": "r673rfgqn0jp0iutsss4k67p2",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "映画刀剣乱舞-黎明-",
+    "body": "黎明って響き、夜明け前のまだ暗い感じがして身構えてしまうな。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dgy1e1g9nio6jndxrqg7qwnfgu%26season%3Dr673rfgqn0jp0iutsss4k67p2&af_id=peeyew-990&ch=api",
+    "category": "映画",
+    "reviewAverage": 2.5,
+    "reviewCount": 20,
+    "genres": [
+      "映画"
+    ],
+    "status": "posted",
+    "created": "2026-11-21T17:52:12.742Z",
+    "postedAt": "2026-11-21T17:52:25.211Z"
   }
 ]
