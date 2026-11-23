@@ -2173,5 +2173,23 @@
     "status": "posted",
     "created": "2026-11-23T09:55:53.721Z",
     "postedAt": "2026-11-23T09:56:05.894Z"
+  },
+  {
+    "contentId": "4pd7kh78ah1sojq9qr6ov3fjt",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "勇者ヨシヒコ",
+    "body": "勇者って肩書き、タイトルに付くだけでちょっと頼りなさそうな予感がするのはなぜだろう。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3D1mc2z8c651f3ei6cxj9reyac0%26season%3D4pd7kh78ah1sojq9qr6ov3fjt&af_id=peeyew-990&ch=api",
+    "category": "ドラマ",
+    "reviewAverage": 4.67,
+    "reviewCount": 3,
+    "genres": [
+      "ドラマ"
+    ],
+    "status": "posted",
+    "created": "2026-11-23T22:26:45.097Z",
+    "postedAt": "2026-11-23T22:26:56.699Z"
   }
 ]
