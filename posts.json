@@ -2273,5 +2273,23 @@
     "status": "posted",
     "created": "2026-11-25T10:37:53.895Z",
     "postedAt": "2026-11-25T10:38:05.615Z"
+  },
+  {
+    "contentId": "8cgab7cndg2xcrdwnsmqxawyb",
+    "source": "dmmtv",
+    "variant": "other",
+    "title": "はじめの一歩",
+    "body": "拳一本で人生賭けるタイトル、今さらだけど響きだけで胸が熱くなる。",
+    "imageUrl": "",
+    "url": "https://al.dmm.com/?lurl=https%3A%2F%2Ftv.dmm.com%2Fvod%2Fdetail%2F%3Ftitle%3Dev4b9au4gr878wkh1gdg8h32g%26season%3D8cgab7cndg2xcrdwnsmqxawyb&af_id=peeyew-990&ch=api",
+    "category": "ドラマ",
+    "reviewAverage": 3.67,
+    "reviewCount": 3,
+    "genres": [
+      "ドラマ"
+    ],
+    "status": "posted",
+    "created": "2026-11-25T20:22:45.235Z",
+    "postedAt": "2026-11-25T20:22:58.631Z"
   }
 ]
